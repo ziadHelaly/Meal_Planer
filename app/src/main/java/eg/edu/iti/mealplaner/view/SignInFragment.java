@@ -3,8 +3,6 @@ package eg.edu.iti.mealplaner.view;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -58,11 +56,11 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
         presenter= new Auth(this);
         etEmail=view.findViewById(R.id.etEmail);
         etPassword=view.findViewById(R.id.etPassword);
-        btnSingIn=view.findViewById(R.id.btnSingIn);
-        tvSignIn=view.findViewById(R.id.tvSingInBtn);
+        btnSingIn=view.findViewById(R.id.btnSingUp);
+        tvSignIn=view.findViewById(R.id.tvSingUpBtn);
         progressBar=view.findViewById(R.id.pbLoad);
         btnGoogle=view.findViewById(R.id.btGoogle);
-        tvSingUp=view.findViewById(R.id.tvSingUp);
+        tvSingUp=view.findViewById(R.id.tvSingIn);
         etEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -118,6 +116,7 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
     public void setAllButtonsClickable(boolean clickable){
         btnGoogle.setClickable(clickable);
         btnSingIn.setClickable(clickable);
+        tvSingUp.setClickable(clickable);
     }
     @Override
     public void onSuccess() {

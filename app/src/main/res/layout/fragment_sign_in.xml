@@ -101,7 +101,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btnSingIn"
+        android:id="@+id/btnSingUp"
         android:layout_width="160dp"
         android:layout_height="50dp"
         android:layout_marginTop="24dp"
@@ -113,7 +113,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etPassword">
 
         <TextView
-            android:id="@+id/tvSingInBtn"
+            android:id="@+id/tvSingUpBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="8dp"
@@ -164,7 +164,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSingIn" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSingUp" />
 
     <TextView
         android:id="@+id/textView7"
@@ -179,7 +179,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btGoogle" />
 
     <TextView
-        android:id="@+id/tvSingUp"
+        android:id="@+id/tvSingIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"

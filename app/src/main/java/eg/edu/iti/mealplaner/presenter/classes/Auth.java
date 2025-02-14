@@ -26,4 +26,18 @@ public class Auth implements AuthPresenter {
         });
 
     }
+
+    @Override
+    public void signUp(String email, String password) {
+        view.showProgressBar();
+        model.singUp(email, password).addOnCompleteListener(task->{
+            if (task.isSuccessful()){
+                view.hideProgressBar();
+                view.onSuccess();
+            }else {
+                view.hideProgressBar();
+                view.onFailure();
+            }
+        });
+    }
 }
