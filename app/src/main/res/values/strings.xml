@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Meal planer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome">Hello chef,\nwelcome!</string>
+    <string name="enter_email">"Enter your email address "</string>
+    <string name="Email">Email</string>
+    <string name="enter_password">Enter your password</string>
+    <string name="password">Password</string>
+    <string name="sign">Sign In</string>
+    <string name="or">or</string>
+    <string name="google">Continue with Google</string>
+    <string name="have_accuont">"Don’t have an account? "</string>
+    <string name="singUp">Sing Up</string>
 </resources>
