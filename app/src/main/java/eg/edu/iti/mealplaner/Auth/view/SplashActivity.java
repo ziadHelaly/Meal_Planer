@@ -1,4 +1,4 @@
-package eg.edu.iti.mealplaner.view;
+package eg.edu.iti.mealplaner.Auth.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

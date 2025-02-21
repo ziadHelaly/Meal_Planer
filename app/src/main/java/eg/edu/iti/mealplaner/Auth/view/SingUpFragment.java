@@ -1,4 +1,4 @@
-package eg.edu.iti.mealplaner.view;
+package eg.edu.iti.mealplaner.Auth.view;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import eg.edu.iti.mealplaner.R;
-import eg.edu.iti.mealplaner.presenter.classes.Auth;
+import eg.edu.iti.mealplaner.Auth.presenter.classes.Auth;
 import eg.edu.iti.mealplaner.presenter.interfaces.AuthPresenter;
 
 
@@ -69,13 +70,7 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty() || etConfirm.getText().toString().isEmpty()) {
-                    btnSingUp.setBackgroundResource(R.drawable.btn_shape);
-                    btnSingUp.setClickable(false);
-                }else{
-                    btnSingUp.setBackgroundResource(R.drawable.btn_active);
-                    btnSingUp.setClickable(true);
-                }
+                checkEdText();
             }
 
             @Override
@@ -91,13 +86,7 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty() || etConfirm.getText().toString().isEmpty()) {
-                    btnSingUp.setBackgroundResource(R.drawable.btn_shape);
-                    btnSingUp.setClickable(false);
-                }else{
-                    btnSingUp.setBackgroundResource(R.drawable.btn_active);
-                    btnSingUp.setClickable(true);
-                }
+                checkEdText();
             }
 
             @Override
@@ -113,14 +102,7 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty() || etConfirm.getText().toString().isEmpty()) {
-                    btnSingUp.setBackgroundResource(R.drawable.btn_shape);
-                    btnSingUp.setClickable(false);
-                }else {
-                    btnSingUp.setBackgroundResource(R.drawable.btn_active);
-                    btnSingUp.setClickable(true);
-                }
-
+                checkEdText();
             }
 
             @Override
@@ -138,6 +120,20 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
                 }
             }
         });
+        tvSignIn.setOnClickListener(v->{
+            Navigation.findNavController(view).popBackStack();
+        });
+    }
+    private void checkEdText(){
+        if (etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty() || etConfirm.getText().toString().isEmpty()) {
+            if(etConfirm.getText().toString().equals(etPassword.getText().toString())){
+                btnSingUp.setBackgroundResource(R.drawable.btn_shape);
+                btnSingUp.setClickable(false);
+            }
+        }else {
+            btnSingUp.setBackgroundResource(R.drawable.btn_active);
+            btnSingUp.setClickable(true);
+        }
     }
 
     @Override

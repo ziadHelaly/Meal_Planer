@@ -9,7 +9,7 @@
     android:paddingTop="16dp"
     android:paddingEnd="16dp"
     android:paddingBottom="32dp"
-    tools:context=".view.SignInFragment">
+    tools:context=".Auth.view.SignInFragment">
 
     <TextView
         android:id="@+id/textView2"

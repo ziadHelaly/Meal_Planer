@@ -1,14 +1,16 @@
-package eg.edu.iti.mealplaner.view;
+package eg.edu.iti.mealplaner.Auth.view;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,8 +24,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import eg.edu.iti.mealplaner.Home.view.HomeActivity;
 import eg.edu.iti.mealplaner.R;
-import eg.edu.iti.mealplaner.presenter.classes.Auth;
+import eg.edu.iti.mealplaner.Auth.presenter.classes.Auth;
 import eg.edu.iti.mealplaner.presenter.interfaces.AuthPresenter;
 
 public class SignInFragment extends Fragment implements AuthPresenter.view {
@@ -106,11 +109,13 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
             }
         });
         btnSingIn.setOnClickListener(v->{
-            Log.d("``TAG``", "onViewCreated: click");
             if (!etEmail.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()){
                 presenter.signIn(etEmail.getText().toString().trim(),etPassword.getText().toString());
             }
 
+        });
+        tvSingUp.setOnClickListener(v->{
+            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_singUpFragment);
         });
     }
     public void setAllButtonsClickable(boolean clickable){
@@ -120,7 +125,11 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
     }
     @Override
     public void onSuccess() {
+
         Toast.makeText(getContext(),"Success",Toast.LENGTH_LONG).show();
+        Intent intent= new Intent(getActivity(), HomeActivity.class);
+        getActivity().startActivity(intent);
+        getActivity().finish();
     }
 
     @Override

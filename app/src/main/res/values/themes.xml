@@ -6,4 +6,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
     <style name="Theme.MealPlaner" parent="Base.Theme.MealPlaner"/>
+    <style name="Base.CardView." parent="CardView">
+        <item name="android:foreground">@drawable/main_card_background</item>
+    </style>
 </resources>

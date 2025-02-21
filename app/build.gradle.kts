@@ -16,6 +16,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    buildFeatures{
+        viewBinding=true
+    }
 
     buildTypes {
         release {
@@ -39,11 +42,26 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-
+    //lottie animation
     implementation (libs.lottie)
+
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.okhttp)
+
+    //room
+    implementation (libs.room.runtime)
+    annotationProcessor (libs.room.compiler)
+
+    //Glide
+    implementation (libs.glide)
+    annotationProcessor(libs.compiler)
 
 }

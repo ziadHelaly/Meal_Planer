@@ -1,6 +1,4 @@
-package eg.edu.iti.mealplaner.model;
-
-import android.util.Log;
+package eg.edu.iti.mealplaner.Auth.model;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

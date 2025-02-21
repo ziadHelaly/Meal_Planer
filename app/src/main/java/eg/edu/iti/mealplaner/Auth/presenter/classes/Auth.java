@@ -1,6 +1,6 @@
-package eg.edu.iti.mealplaner.presenter.classes;
+package eg.edu.iti.mealplaner.Auth.presenter.classes;
 
-import eg.edu.iti.mealplaner.model.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.Auth.model.FireBaseAuthModel;
 import eg.edu.iti.mealplaner.presenter.interfaces.AuthPresenter;
 
 public class Auth implements AuthPresenter {
