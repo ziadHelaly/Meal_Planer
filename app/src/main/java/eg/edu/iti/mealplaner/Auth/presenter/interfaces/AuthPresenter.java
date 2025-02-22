@@ -1,4 +1,4 @@
-package eg.edu.iti.mealplaner.presenter.interfaces;
+package eg.edu.iti.mealplaner.Auth.presenter.interfaces;
 
 public interface AuthPresenter {
     void signIn(String email,String password);

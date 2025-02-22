@@ -20,9 +20,20 @@
         <item name="fontFamily">@font/ft_poppins_light</item>
         <item name="android:textSize">12sp</item>
     </style>
+    <style name="body">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/ft_poppins_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
     <style name="circleIV">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="header3">
+        <item name="android:textColor">#FFC107</item>
+        <item name="fontFamily">@font/ft_poppins_semi_bold</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

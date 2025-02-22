@@ -1,4 +1,4 @@
-package eg.edu.iti.mealplaner.Auth.view;
+package eg.edu.iti.mealplaner;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import eg.edu.iti.mealplaner.R;
+import eg.edu.iti.mealplaner.Auth.view.AuthActivity;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
        handler=new Handler(Looper.getMainLooper());
        handler.postDelayed(()->{
-           Intent intent=new Intent(SplashActivity.this,AuthActivity.class);
+           Intent intent=new Intent(SplashActivity.this, AuthActivity.class);
            startActivity(intent);
            finish();
        },3000);

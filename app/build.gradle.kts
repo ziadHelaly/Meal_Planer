@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -63,5 +64,7 @@ dependencies {
     //Glide
     implementation (libs.glide)
     annotationProcessor(libs.compiler)
+    //youtube player
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
 
 }

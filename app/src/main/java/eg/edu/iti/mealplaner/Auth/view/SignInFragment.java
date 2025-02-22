@@ -27,7 +27,7 @@ import android.widget.Toast;
 import eg.edu.iti.mealplaner.Home.view.HomeActivity;
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.Auth.presenter.classes.Auth;
-import eg.edu.iti.mealplaner.presenter.interfaces.AuthPresenter;
+import eg.edu.iti.mealplaner.Auth.presenter.interfaces.AuthPresenter;
 
 public class SignInFragment extends Fragment implements AuthPresenter.view {
     AuthPresenter presenter;

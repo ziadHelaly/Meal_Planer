@@ -1,10 +1,46 @@
 package eg.edu.iti.mealplaner.Home.model.models;
 
 
+import android.util.Pair;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Meal {
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "strMeal='" + strMeal + '\'' +
+                '}';
+    }
+
+    public List<Pair<String, String>> getIngredient_Measure() {
+        List<Pair<String, String>> ingredientMeasureList = new ArrayList<>();
+
+        for (int i = 1; i <= 20; i++) {
+            try {
+                Field ingredientField = this.getClass().getDeclaredField("strIngredient" + i);
+                Field measureField = this.getClass().getDeclaredField("strMeasure" + i);
+
+                String ingredient = (String) ingredientField.get(this);
+                String measure = (String) measureField.get(this);
+
+                if (ingredient != null && !ingredient.trim().isEmpty()) {
+                    ingredientMeasureList.add(new Pair<>(ingredient, measure));
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return ingredientMeasureList;
+    }
+
 
     @SerializedName("idMeal")
     @Expose

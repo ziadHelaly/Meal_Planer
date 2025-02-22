@@ -1,12 +1,16 @@
 package eg.edu.iti.mealplaner.Home.presenter;
 
+import android.util.Log;
+
 import java.util.List;
 
+import eg.edu.iti.mealplaner.Home.model.models.Category;
 import eg.edu.iti.mealplaner.Home.model.models.Meal;
-import eg.edu.iti.mealplaner.Home.model.network.NetworkCallBack;
+import eg.edu.iti.mealplaner.Home.model.network.HomeNetworkCallBack;
 import eg.edu.iti.mealplaner.Home.model.repository.Repository;
+import eg.edu.iti.mealplaner.utilies.NetworkCalls;
 
-public class HomePresenterImpl implements HomePresenter, NetworkCallBack {
+public class HomePresenterImpl implements HomePresenter, HomeNetworkCallBack {
     Repository myRepo;
     HomePresenter.View view;
 
@@ -16,15 +20,49 @@ public class HomePresenterImpl implements HomePresenter, NetworkCallBack {
     }
 
     @Override
+    public void getCategories() {
+        myRepo.getCategories(this);
+    }
+
+    @Override
+    public void getEgyptianSection() {
+        myRepo.getFilteredDataByArea("Egyptian", this,NetworkCalls.EgyptianCategory);
+    }
+
+    @Override
+    public void getBeefSection() {
+        myRepo.getFilteredDataByCategory("Beef",this,NetworkCalls.BeefCategory);
+    }
+
+    @Override
+    public void getVeganSection() {
+        myRepo.getFilteredDataByCategory("Vegan",this,NetworkCalls.VeganCategory);
+
+    }
+
+    @Override
     public void getMealOfToday() {
         view.showLoadingScreen();
         myRepo.getRandomMeal(this);
     }
-//TODO افتكر تظبط بقيت الانترفييس 
+
     @Override
-    public void onSuccessResult(List<Meal> meals) {
+    public void onSuccessResultMeals(List<Meal> meals, NetworkCalls type) {
         view.hideLoadingScreen();
-        view.displayMealOfToday(meals.get(0));
+        if (type == NetworkCalls.MealOfToday) {
+            view.displayMealOfToday(meals.get(0));
+        } else if (type == NetworkCalls.EgyptianCategory) {
+            view.displayEgyptSection(meals);
+        } else if (type == NetworkCalls.BeefCategory) {
+            view.displayBeefSection(meals);
+        } else if (type == NetworkCalls.VeganCategory) {
+            view.displayVeganSection(meals);
+        }
+    }
+
+    @Override
+    public void onSuccessResultCategories(List<Category> categories) {
+        view.displayCategories(categories);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package eg.edu.iti.mealplaner.Home.model.repository;
 
 import eg.edu.iti.mealplaner.Home.model.network.MealsRemoteDataSource;
-import eg.edu.iti.mealplaner.Home.model.network.NetworkCallBack;
+import eg.edu.iti.mealplaner.Home.model.network.HomeNetworkCallBack;
+import eg.edu.iti.mealplaner.utilies.NetworkCalls;
 
 public class RepositoryImpl implements Repository {
     MealsRemoteDataSource remote;
@@ -17,8 +18,32 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public void getRandomMeal(NetworkCallBack networkCallBack){
-        remote.getRandomMeal(networkCallBack);
+    public void getRandomMeal(HomeNetworkCallBack homeNetworkCallBack){
+        remote.getRandomMeal(homeNetworkCallBack);
+    }
+    @Override
+    public void getCategories(HomeNetworkCallBack homeNetworkCallBack){
+        remote.getCategories(homeNetworkCallBack);
+    }
+
+    @Override
+    public void getMealById(String id, HomeNetworkCallBack homeNetworkCallBack,NetworkCalls type) {
+        remote.getMealById(id,homeNetworkCallBack,type);
+    }
+
+    @Override
+    public void getFilteredDataByArea(String a, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type){
+        remote.getFilteredDataByArea(a,homeNetworkCallBack,type);
+    }
+
+    @Override
+    public void getFilteredDataByCategory(String c, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
+        remote.getFilteredDataByCategory(c,homeNetworkCallBack, type);
+    }
+
+    @Override
+    public void getFilteredDataByIngradiants(String i, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
+        remote.getFilteredDataByIngredients(i,homeNetworkCallBack,type);
     }
 
 }

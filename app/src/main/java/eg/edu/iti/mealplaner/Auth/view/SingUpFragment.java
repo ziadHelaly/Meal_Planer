@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.Auth.presenter.classes.Auth;
-import eg.edu.iti.mealplaner.presenter.interfaces.AuthPresenter;
+import eg.edu.iti.mealplaner.Auth.presenter.interfaces.AuthPresenter;
 
 
 public class SingUpFragment extends Fragment implements AuthPresenter.view {
