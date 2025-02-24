@@ -19,18 +19,21 @@ import eg.edu.iti.mealplaner.view.HomeActivity;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
     Handler handler;
+    SharedPreference pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
-        boolean isLogged = new SharedPreference(this).getBoolean(Const.isLogged_TAG);
+        pref=new SharedPreference(this);
+        boolean isLogged = pref.getBoolean(Const.isLogged_TAG);
         Const.isLogged = isLogged;
         handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
             Intent intent;
             if (isLogged) {
+                Const.USER_ID =pref.getString(Const.USER_ID_TAG);
                 intent = new Intent(SplashActivity.this, HomeActivity.class);
             } else {
                 intent = new Intent(SplashActivity.this, AuthActivity.class);

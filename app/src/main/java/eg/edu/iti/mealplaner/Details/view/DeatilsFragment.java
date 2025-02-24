@@ -66,6 +66,7 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
             Navigation.findNavController(view).popBackStack();
         });
         getLifecycle().addObserver(binding.youtubePlayer);
+
     }
 
     @Override
@@ -75,6 +76,9 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
 
     @Override
     public void showData(Meal meal) {
+        binding.ivFav.setOnClickListener(v->{
+            presenter.addMealToFav(meal);
+        });
         binding.tvMealName.setText(meal.getStrMeal());
         binding.tvCategoryDetails.setText(meal.getStrCategory());
         binding.tvInstractions.setText(meal.getStrInstructions());

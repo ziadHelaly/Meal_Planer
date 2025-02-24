@@ -23,6 +23,11 @@ public class DetailsPresenterImpl implements DetailsPresenter, HomeNetworkCallBa
     }
 
     @Override
+    public void addMealToFav(Meal meal) {
+        repo.addMealToFav(meal);
+    }
+
+    @Override
     public void onSuccessResultMeals(List<Meal> meals, NetworkCalls type) {
         if (type==NetworkCalls.MealById){
             view.showData(meals.get(0));

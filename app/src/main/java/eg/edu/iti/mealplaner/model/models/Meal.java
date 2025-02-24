@@ -3,6 +3,7 @@ package eg.edu.iti.mealplaner.model.models;
 
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -52,9 +53,9 @@ public class Meal {
     }
 
     private String userId;
-
     @PrimaryKey
     @SerializedName("idMeal")
+    @NonNull
     @Expose
     private String idMeal;
     @SerializedName("strMeal")

@@ -2,8 +2,13 @@ package eg.edu.iti.mealplaner.model.repository;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+
+import java.util.List;
+
 import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
 import eg.edu.iti.mealplaner.model.local.SharedPreference;
+import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
 import eg.edu.iti.mealplaner.model.remote.HomeNetworkCallBack;
 import eg.edu.iti.mealplaner.utilies.Const;
@@ -43,6 +48,22 @@ public class RepositoryImpl implements Repository {
     @Override
     public String getUserID() {
         return sharedPreference.getString(Const.USER_ID_TAG);
+    }
+
+    @Override
+    public void addMealToFav(Meal meal) {
+        meal.setUserId(Const.USER_ID);
+        local.insert(meal);
+    }
+
+    @Override
+    public void removeMealFromFav(Meal meal) {
+
+    }
+
+    @Override
+    public LiveData<List<Meal>> getFavsMeals(String id) {
+        return null;
     }
 
     @Override
