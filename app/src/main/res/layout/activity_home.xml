@@ -5,21 +5,28 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home.view.HomeActivity">
+    tools:context=".view.HomeActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView2"
+        android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/nav_bottom"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph_home" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_bottom"
         android:layout_width="match_parent"
         android:layout_height="75dp"
+        android:background="@color/white"
+        android:elevation="10dp"
+        app:itemIconTint="@color/nav_item"
+        app:itemTextColor="@color/nav_item"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/nav_menu"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

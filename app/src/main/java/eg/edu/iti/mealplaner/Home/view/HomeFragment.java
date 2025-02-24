@@ -13,18 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-import eg.edu.iti.mealplaner.Home.model.models.Category;
-import eg.edu.iti.mealplaner.Home.model.models.Meal;
-import eg.edu.iti.mealplaner.Home.model.repository.RepositoryImpl;
+import eg.edu.iti.mealplaner.model.models.Category;
+import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.Home.presenter.HomePresenter;
 import eg.edu.iti.mealplaner.Home.presenter.HomePresenterImpl;
-import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.databinding.FragmentHomeBinding;
 import eg.edu.iti.mealplaner.Home.view.HomeFragmentDirections.ActionHomeFragmentToDeatilsFragment;
+import eg.edu.iti.mealplaner.view.ItemsAdapter;
 
 
 public class HomeFragment extends Fragment implements HomePresenter.View {
@@ -51,7 +50,7 @@ public class HomeFragment extends Fragment implements HomePresenter.View {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter=new HomePresenterImpl(RepositoryImpl.getRepository(),this);
+        presenter=new HomePresenterImpl(RepositoryImpl.getRepository(getContext()),this);
         presenter.getMealOfToday();
         presenter.getCategories();
         presenter.getEgyptianSection();

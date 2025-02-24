@@ -13,13 +13,13 @@
         android:theme="@style/Theme.MealPlaner"
         tools:targetApi="31">
         <activity
-            android:name=".Home.view.HomeActivity"
+            android:name=".view.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".Auth.view.AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".Splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

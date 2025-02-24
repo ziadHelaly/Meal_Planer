@@ -14,7 +14,6 @@ import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +23,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import eg.edu.iti.mealplaner.Home.view.HomeActivity;
+import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
+import eg.edu.iti.mealplaner.view.HomeActivity;
 import eg.edu.iti.mealplaner.R;
-import eg.edu.iti.mealplaner.Auth.presenter.classes.Auth;
-import eg.edu.iti.mealplaner.Auth.presenter.interfaces.AuthPresenter;
+import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenterImpl;
+import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenter;
 
 public class SignInFragment extends Fragment implements AuthPresenter.view {
     AuthPresenter presenter;
@@ -56,7 +56,7 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter= new Auth(this);
+        presenter= new AuthPresenterImpl(this, RepositoryImpl.getRepository(getContext()));
         etEmail=view.findViewById(R.id.etEmail);
         etPassword=view.findViewById(R.id.etPassword);
         btnSingIn=view.findViewById(R.id.btnSingUp);

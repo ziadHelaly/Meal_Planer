@@ -1,13 +1,11 @@
 package eg.edu.iti.mealplaner.Home.presenter;
 
-import android.util.Log;
-
 import java.util.List;
 
-import eg.edu.iti.mealplaner.Home.model.models.Category;
-import eg.edu.iti.mealplaner.Home.model.models.Meal;
-import eg.edu.iti.mealplaner.Home.model.network.HomeNetworkCallBack;
-import eg.edu.iti.mealplaner.Home.model.repository.Repository;
+import eg.edu.iti.mealplaner.model.models.Category;
+import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.remote.HomeNetworkCallBack;
+import eg.edu.iti.mealplaner.model.repository.Repository;
 import eg.edu.iti.mealplaner.utilies.NetworkCalls;
 
 public class HomePresenterImpl implements HomePresenter, HomeNetworkCallBack {

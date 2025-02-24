@@ -12,8 +12,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import eg.edu.iti.mealplaner.Home.model.models.Category;
-import eg.edu.iti.mealplaner.Home.model.models.Meal;
+import eg.edu.iti.mealplaner.model.models.Category;
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.databinding.AdapterCategoriesBinding;
 

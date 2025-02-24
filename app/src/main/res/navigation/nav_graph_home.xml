@@ -21,12 +21,12 @@
     </fragment>
     <fragment
         android:id="@+id/favFragment"
-        android:name="eg.edu.iti.mealplaner.Home.view.FavFragment"
+        android:name="eg.edu.iti.mealplaner.Favourites.view.FavFragment"
         android:label="fragment_fav"
         tools:layout="@layout/fragment_fav" />
     <fragment
         android:id="@+id/deatilsFragment"
-        android:name="eg.edu.iti.mealplaner.Home.view.DeatilsFragment"
+        android:name="eg.edu.iti.mealplaner.Details.view.DeatilsFragment"
         android:label="fragment_deatils"
         tools:layout="@layout/fragment_deatils" >
         <argument
@@ -35,17 +35,17 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="eg.edu.iti.mealplaner.SearchFragment"
+        android:name="eg.edu.iti.mealplaner.Search.view.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/porfileFragment"
-        android:name="eg.edu.iti.mealplaner.PorfileFragment"
+        android:name="eg.edu.iti.mealplaner.Profile.view.PorfileFragment"
         android:label="fragment_porfile"
         tools:layout="@layout/fragment_porfile" />
     <fragment
         android:id="@+id/calenderFragment"
-        android:name="eg.edu.iti.mealplaner.CalenderFragment"
+        android:name="eg.edu.iti.mealplaner.calender.view.CalenderFragment"
         android:label="fragment_calender"
         tools:layout="@layout/fragment_calender" />
 </navigation>

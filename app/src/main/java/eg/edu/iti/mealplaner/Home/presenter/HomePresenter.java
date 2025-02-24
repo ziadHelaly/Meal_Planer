@@ -2,8 +2,8 @@ package eg.edu.iti.mealplaner.Home.presenter;
 
 import java.util.List;
 
-import eg.edu.iti.mealplaner.Home.model.models.Category;
-import eg.edu.iti.mealplaner.Home.model.models.Meal;
+import eg.edu.iti.mealplaner.model.models.Category;
+import eg.edu.iti.mealplaner.model.models.Meal;
 
 public interface HomePresenter {
     void getMealOfToday();
