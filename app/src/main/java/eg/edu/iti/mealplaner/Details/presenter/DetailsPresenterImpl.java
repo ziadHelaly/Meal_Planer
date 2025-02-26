@@ -2,19 +2,16 @@ package eg.edu.iti.mealplaner.Details.presenter;
 
 import android.annotation.SuppressLint;
 
-import java.util.List;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import eg.edu.iti.mealplaner.model.models.Category;
 import eg.edu.iti.mealplaner.model.models.Meal;
-import eg.edu.iti.mealplaner.model.remote.HomeNetworkCallBack;
 import eg.edu.iti.mealplaner.model.repository.Repository;
-import eg.edu.iti.mealplaner.utilies.NetworkCalls;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class DetailsPresenterImpl implements DetailsPresenter, HomeNetworkCallBack {
+public class DetailsPresenterImpl implements DetailsPresenter {
     Repository repo;
     DetailsPresenter.View view;
 
@@ -23,9 +20,17 @@ public class DetailsPresenterImpl implements DetailsPresenter, HomeNetworkCallBa
         this.view = view;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getData(String id) {
-        repo.getMealById(id,this,NetworkCalls.MealById);
+        repo.getMealById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    view.showData(item.getMeals().get(0));
+                }, error -> {
+                    //TODO
+                });
     }
 
     @SuppressLint("CheckResult")
@@ -53,12 +58,6 @@ public class DetailsPresenterImpl implements DetailsPresenter, HomeNetworkCallBa
     }
 
     @Override
-    public void onSuccessResultMeals(List<Meal> meals, NetworkCalls type) {
-        if (type==NetworkCalls.MealById){
-            view.showData(meals.get(0));
-        }
-    }
-    @Override
     public String extractYouTubeVideoId(String videoUrl) {
         if (videoUrl == null) return null;
 
@@ -68,13 +67,4 @@ public class DetailsPresenterImpl implements DetailsPresenter, HomeNetworkCallBa
         return matcher.find() ? matcher.group(1) : null;
     }
 
-    @Override
-    public void onSuccessResultCategories(List<Category> categories) {
-
-    }
-
-    @Override
-    public void onFailure(String message) {
-
-    }
 }

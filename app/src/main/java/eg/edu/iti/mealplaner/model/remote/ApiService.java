@@ -2,21 +2,22 @@ package eg.edu.iti.mealplaner.model.remote;
 
 import eg.edu.iti.mealplaner.model.models.CategoryResponse;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ApiService {
     @GET("random.php")
-    Call<MealsResponse> getRandomMeal();
+    Single<MealsResponse> getRandomMeal();
     @GET("categories.php")
-    Call<CategoryResponse> getCategories();
+    Single<CategoryResponse> getCategories();
     @GET("filter.php")
-    Call<MealsResponse> getFilteredListByArea(@Query("a") String a);
+    Single<MealsResponse> getFilteredListByArea(@Query("a") String a);
     @GET("filter.php")
-    Call<MealsResponse> getFilteredListByCategory(@Query("c") String c);
+    Single<MealsResponse> getFilteredListByCategory(@Query("c") String c);
     @GET("filter.php")
-    Call<MealsResponse> getFilteredListByIngredient(@Query("i") String i);
+    Single<MealsResponse> getFilteredListByIngredient(@Query("i") String i);
     @GET("lookup.php")
-    Call<MealsResponse> getMealById(@Query("i") String id);
+    Single<MealsResponse> getMealById(@Query("i") String id);
 }

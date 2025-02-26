@@ -8,11 +8,11 @@ import java.util.List;
 
 import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
 import eg.edu.iti.mealplaner.model.local.SharedPreference;
+import eg.edu.iti.mealplaner.model.models.CategoryResponse;
 import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.models.MealsResponse;
 import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
-import eg.edu.iti.mealplaner.model.remote.HomeNetworkCallBack;
 import eg.edu.iti.mealplaner.utilies.Const;
-import eg.edu.iti.mealplaner.utilies.NetworkCalls;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -69,38 +69,39 @@ public class RepositoryImpl implements Repository {
         return local.getMeals(Const.USER_ID);
     }
 
+    //TODO when we add network check we will use to load data in offline mode
     @Override
     public Single<Meal> getFavMealDetails(String id) {
         return local.getMeal(id);
     }
 
     @Override
-    public void getRandomMeal(HomeNetworkCallBack homeNetworkCallBack){
-        remote.getRandomMeal(homeNetworkCallBack);
+    public Single<MealsResponse>  getRandomMeal(){
+        return remote.getRandomMeal();
     }
     @Override
-    public void getCategories(HomeNetworkCallBack homeNetworkCallBack){
-        remote.getCategories(homeNetworkCallBack);
-    }
-
-    @Override
-    public void getMealById(String id, HomeNetworkCallBack homeNetworkCallBack,NetworkCalls type) {
-        remote.getMealById(id,homeNetworkCallBack,type);
+    public Single<CategoryResponse> getCategories(){
+        return remote.getCategories();
     }
 
     @Override
-    public void getFilteredDataByArea(String a, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type){
-        remote.getFilteredDataByArea(a,homeNetworkCallBack,type);
+    public Single<MealsResponse> getMealById(String id) {
+        return remote.getMealById(id);
     }
 
     @Override
-    public void getFilteredDataByCategory(String c, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
-        remote.getFilteredDataByCategory(c,homeNetworkCallBack, type);
+    public Single<MealsResponse>  getFilteredDataByArea(String a){
+        return remote.getFilteredDataByArea(a);
     }
 
     @Override
-    public void getFilteredDataByIngradiants(String i, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
-        remote.getFilteredDataByIngredients(i,homeNetworkCallBack,type);
+    public Single<MealsResponse>  getFilteredDataByCategory(String c) {
+        return remote.getFilteredDataByCategory(c);
+    }
+
+    @Override
+    public Single<MealsResponse>  getFilteredDataByIngradiants(String i) {
+        return remote.getFilteredDataByIngredients(i);
     }
 
 }

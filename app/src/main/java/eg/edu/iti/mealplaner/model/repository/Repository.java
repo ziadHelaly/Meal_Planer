@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import eg.edu.iti.mealplaner.model.models.CategoryResponse;
 import eg.edu.iti.mealplaner.model.models.Meal;
-import eg.edu.iti.mealplaner.model.remote.HomeNetworkCallBack;
-import eg.edu.iti.mealplaner.utilies.NetworkCalls;
+import eg.edu.iti.mealplaner.model.models.MealsResponse;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -19,10 +19,10 @@ public interface Repository {
     Completable removeMealFromFav(Meal meal);
     Flowable<List<Meal>> getFavsMeals( );
     Single<Meal> getFavMealDetails(String id);
-    void getRandomMeal(HomeNetworkCallBack homeNetworkCallBack);
-    void getCategories(HomeNetworkCallBack homeNetworkCallBack);
-    void getMealById(String id,HomeNetworkCallBack homeNetworkCallBack,NetworkCalls type);
-    void getFilteredDataByArea(String a,HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type);
-    void getFilteredDataByCategory(String c,HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type);
-    void getFilteredDataByIngradiants(String i,HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type);
+    Single<MealsResponse>  getRandomMeal();
+    Single<CategoryResponse> getCategories();
+    Single<MealsResponse> getMealById(String id);
+    Single<MealsResponse>  getFilteredDataByArea(String a);
+    Single<MealsResponse>  getFilteredDataByCategory(String c);
+    Single<MealsResponse>  getFilteredDataByIngradiants(String i);
 }

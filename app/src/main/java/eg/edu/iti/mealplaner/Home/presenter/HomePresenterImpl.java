@@ -1,14 +1,11 @@
 package eg.edu.iti.mealplaner.Home.presenter;
 
-import java.util.List;
-
-import eg.edu.iti.mealplaner.model.models.Category;
-import eg.edu.iti.mealplaner.model.models.Meal;
-import eg.edu.iti.mealplaner.model.remote.HomeNetworkCallBack;
+import android.annotation.SuppressLint;
 import eg.edu.iti.mealplaner.model.repository.Repository;
-import eg.edu.iti.mealplaner.utilies.NetworkCalls;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class HomePresenterImpl implements HomePresenter, HomeNetworkCallBack {
+public class HomePresenterImpl implements HomePresenter {
     Repository myRepo;
     HomePresenter.View view;
 
@@ -17,54 +14,71 @@ public class HomePresenterImpl implements HomePresenter, HomeNetworkCallBack {
         this.view = view;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getCategories() {
-        myRepo.getCategories(this);
+        myRepo.getCategories()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        item -> view.displayCategories(item.getCategories()),
+                        error -> {
+                    //TODO
+                }).dispose();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getEgyptianSection() {
-        myRepo.getFilteredDataByArea("Egyptian", this,NetworkCalls.EgyptianCategory);
+        myRepo.getFilteredDataByArea("Egyptian")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    view.displayEgyptSection(item.getMeals());
+                }, error -> {
+                    //TODO
+                }).dispose();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getBeefSection() {
-        myRepo.getFilteredDataByCategory("Beef",this,NetworkCalls.BeefCategory);
+        myRepo.getFilteredDataByCategory("Beef")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    view.displayBeefSection(item.getMeals());
+                }, error -> {
+                    //TODO
+                }).dispose();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getVeganSection() {
-        myRepo.getFilteredDataByCategory("Vegan",this,NetworkCalls.VeganCategory);
+        myRepo.getFilteredDataByCategory("Vegan")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    view.displayVeganSection(item.getMeals());
+                }, error -> {
+                    //TODO
+                }).dispose();
 
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getMealOfToday() {
         view.showLoadingScreen();
-        myRepo.getRandomMeal(this);
+        myRepo.getRandomMeal()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    view.displayMealOfToday(item.getMeals().get(0));
+                }, error -> {
+                    //TODO
+                }).dispose();
     }
 
-    @Override
-    public void onSuccessResultMeals(List<Meal> meals, NetworkCalls type) {
-        view.hideLoadingScreen();
-        if (type == NetworkCalls.MealOfToday) {
-            view.displayMealOfToday(meals.get(0));
-        } else if (type == NetworkCalls.EgyptianCategory) {
-            view.displayEgyptSection(meals);
-        } else if (type == NetworkCalls.BeefCategory) {
-            view.displayBeefSection(meals);
-        } else if (type == NetworkCalls.VeganCategory) {
-            view.displayVeganSection(meals);
-        }
-    }
-
-    @Override
-    public void onSuccessResultCategories(List<Category> categories) {
-        view.displayCategories(categories);
-    }
-
-    @Override
-    public void onFailure(String message) {
-
-    }
 }

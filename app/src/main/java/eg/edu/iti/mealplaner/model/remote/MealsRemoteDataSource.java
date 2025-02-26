@@ -9,21 +9,19 @@ import java.io.File;
 import eg.edu.iti.mealplaner.model.models.CategoryResponse;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
 import eg.edu.iti.mealplaner.utilies.Const;
-import eg.edu.iti.mealplaner.utilies.NetworkCalls;
+import io.reactivex.rxjava3.core.Single;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
-import okhttp3.OkHttp;
 import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MealsRemoteDataSource {
     ApiService myApi;
 
     public MealsRemoteDataSource(Context context) {
+        //TODO edit it in search
         Cache cache = new Cache(new File(context.getCacheDir(), "cache"), Const.CACHE_SIZE);
         Interceptor onlineInterceptor = chain -> {
             okhttp3.Response response = chain.proceed(chain.request());
@@ -40,6 +38,7 @@ public class MealsRemoteDataSource {
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
         myApi = retrofit.create(ApiService.class);
     }
@@ -50,90 +49,28 @@ public class MealsRemoteDataSource {
         }
         return client;
     }*/
-    public void getRandomMeal(HomeNetworkCallBack networkCallBack) {
-        myApi.getRandomMeal().enqueue(new Callback<MealsResponse>() {
-            @Override
-            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-                if (response.body() != null) {
-                    networkCallBack.onSuccessResultMeals(response.body().getMeals(), NetworkCalls.MealOfToday);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-            }
-        });
+    public Single<MealsResponse> getRandomMeal() {
+        return myApi.getRandomMeal();
     }
 
-    public void getCategories(HomeNetworkCallBack homeNetworkCallBack) {
-        myApi.getCategories().enqueue(new Callback<CategoryResponse>() {
-            @Override
-            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
-                homeNetworkCallBack.onSuccessResultCategories(response.body().getCategories());
-            }
-
-            @Override
-            public void onFailure(Call<CategoryResponse> call, Throwable t) {
-                homeNetworkCallBack.onFailure(t.getMessage());
-            }
-        });
+    public Single<CategoryResponse> getCategories() {
+        return myApi.getCategories();
     }
 
-    public void getFilteredDataByArea(String a, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
-        myApi.getFilteredListByArea(a).enqueue(new Callback<MealsResponse>() {
-            @Override
-            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-                homeNetworkCallBack.onSuccessResultMeals(response.body().getMeals(), type);
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                homeNetworkCallBack.onFailure(t.getMessage());
-            }
-        });
+    public Single<MealsResponse> getFilteredDataByArea(String a) {
+        return myApi.getFilteredListByArea(a);
     }
 
-    public void getFilteredDataByCategory(String c, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
-        myApi.getFilteredListByCategory(c).enqueue(new Callback<MealsResponse>() {
-            @Override
-            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-                homeNetworkCallBack.onSuccessResultMeals(response.body().getMeals(), type);
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                homeNetworkCallBack.onFailure(t.getMessage());
-            }
-        });
+    public Single<MealsResponse> getFilteredDataByCategory(String c) {
+        return myApi.getFilteredListByCategory(c);
     }
 
-    public void getFilteredDataByIngredients(String i, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
-        myApi.getFilteredListByIngredient(i).enqueue(new Callback<MealsResponse>() {
-            @Override
-            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-                homeNetworkCallBack.onSuccessResultMeals(response.body().getMeals(), type);
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                homeNetworkCallBack.onFailure(t.getMessage());
-            }
-        });
+    public Single<MealsResponse> getFilteredDataByIngredients(String i) {
+        return myApi.getFilteredListByIngredient(i);
     }
 
-    public void getMealById(String id, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
-        myApi.getMealById(id).enqueue(new Callback<MealsResponse>() {
-            @Override
-            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-                homeNetworkCallBack.onSuccessResultMeals(response.body().getMeals(), type);
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                homeNetworkCallBack.onFailure(t.getMessage());
-            }
-        });
+    public Single<MealsResponse> getMealById(String id) {
+        return myApi.getMealById(id);
     }
 
 }
