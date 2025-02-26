@@ -10,9 +10,11 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serial;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity(tableName = "fav_table")
 public class Meal {

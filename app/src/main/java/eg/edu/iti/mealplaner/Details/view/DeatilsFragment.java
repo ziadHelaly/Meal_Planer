@@ -1,5 +1,6 @@
 package eg.edu.iti.mealplaner.Details.view;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -24,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eg.edu.iti.mealplaner.Details.view.DeatilsFragmentArgs;
+import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.Details.presenter.DetailsPresenter;
@@ -36,6 +39,7 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
     FragmentDeatilsBinding binding;
     String id;
     DetailsPresenter presenter;
+    boolean isFav=false;
 
     public DeatilsFragment() {
         // Required empty public constructor
@@ -54,7 +58,7 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
         binding = FragmentDeatilsBinding.inflate(inflater, container, false);
         id = DeatilsFragmentArgs.fromBundle(getArguments()).getIdMeal();
         Log.d("```TAG```", "onCreateView: " + id);
-        presenter=new DetailsPresenterImpl(RepositoryImpl.getRepository(getContext()),this);
+        presenter = new DetailsPresenterImpl(RepositoryImpl.getRepository(getContext()), this);
         return binding.getRoot();
     }
 
@@ -62,7 +66,7 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.getData(id);
-        binding.back.setOnClickListener(v->{
+        binding.back.setOnClickListener(v -> {
             Navigation.findNavController(view).popBackStack();
         });
         getLifecycle().addObserver(binding.youtubePlayer);
@@ -72,12 +76,17 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        binding = null;
     }
 
     @Override
     public void showData(Meal meal) {
-        binding.ivFav.setOnClickListener(v->{
-            presenter.addMealToFav(meal);
+        binding.ivFav.setOnClickListener(v -> {
+            if (!isFav){
+                presenter.addMealToFav(meal);
+            }else {
+                presenter.removeFromFav(meal);
+            }
         });
         binding.tvMealName.setText(meal.getStrMeal());
         binding.tvCategoryDetails.setText(meal.getStrCategory());
@@ -89,30 +98,41 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
                         new RoundedCorners(16)
                 ))
                 .into(binding.ivMeal);
-        binding.rvIngradaients.setAdapter(new IngrediantsAdapter(meal.getIngredient_Measure(),getContext()));
-        String videoId=extractYouTubeVideoId(meal.getStrYoutube());
+        binding.rvIngradaients.setAdapter(new IngrediantsAdapter(meal.getIngredient_Measure(), getContext()));
+        String videoId = presenter.extractYouTubeVideoId(meal.getStrYoutube());
         binding.youtubePlayer.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.cueVideo(videoId,0f);
+                youTubePlayer.cueVideo(videoId, 0f);
             }
 
             @Override
             public void onError(@NonNull YouTubePlayer youTubePlayer, @NonNull PlayerConstants.PlayerError error) {
                 super.onError(youTubePlayer, error);
-                Toast.makeText(getContext(), "youtube error "+error.name(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "youtube error " + error.name(), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
-    private String extractYouTubeVideoId(String videoUrl) {
-        if (videoUrl == null) return null;
 
-        String pattern = "^(?:https?://)?(?:www\\.)?(?:youtube\\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)|.*[?&]v=)|youtu\\.be/)([^\"&?/ ]{11})";
-        Pattern compiledPattern = Pattern.compile(pattern);
-        Matcher matcher = compiledPattern.matcher(videoUrl);
-        return matcher.find() ? matcher.group(1) : null;
+    @Override
+    public void showSnackBar(String msg) {
+        Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT)
+                .show();
     }
+
+    @Override
+    public void onAddToFav() {
+        binding.ivFav.setImageResource(R.drawable.ic_filled_fav);
+        isFav=true;
+    }
+
+    @Override
+    public void onRemoveFromFav() {
+        binding.ivFav.setImageResource(R.drawable.ic_fav);
+        isFav=false;
+    }
+
 
     @Override
     public void showLoading() {

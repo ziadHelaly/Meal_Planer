@@ -23,7 +23,16 @@
         android:id="@+id/favFragment"
         android:name="eg.edu.iti.mealplaner.Favourites.view.FavFragment"
         android:label="fragment_fav"
-        tools:layout="@layout/fragment_fav" />
+        tools:layout="@layout/fragment_fav" >
+        <action
+            android:id="@+id/action_favFragment_to_deatilsFragment"
+            app:destination="@id/deatilsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/favFragment" />
+    </fragment>
     <fragment
         android:id="@+id/deatilsFragment"
         android:name="eg.edu.iti.mealplaner.Details.view.DeatilsFragment"

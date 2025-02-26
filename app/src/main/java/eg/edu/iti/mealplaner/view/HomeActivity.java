@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.databinding.ActivityHomeBinding;
 
@@ -22,6 +25,16 @@ public class HomeActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(binding.navBottom,navHostFragment.getNavController());
 
+        Set<Integer> hiddenFragments = new HashSet<>();
+        hiddenFragments.add(R.id.deatilsFragment);
+
+        navHostFragment.getNavController().addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (hiddenFragments.contains(destination.getId())) {
+                binding.navBottom.setVisibility(View.GONE);
+            } else {
+                binding.navBottom.setVisibility(View.VISIBLE);
+            }
+        });
 
     }
 }

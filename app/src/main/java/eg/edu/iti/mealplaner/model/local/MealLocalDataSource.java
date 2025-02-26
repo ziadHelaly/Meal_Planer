@@ -7,31 +7,34 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import eg.edu.iti.mealplaner.model.models.Meal;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 
 public class MealLocalDataSource {
     Context context;
     MealDao MealDao;
-    LiveData<List<Meal>> Meals;
+    Flowable<List<Meal>> Meals;
+
     public MealLocalDataSource(Context _context) {
         context = _context;
         MealDao = FavouritesDataBase.getInstance(context.getApplicationContext()).getMealDao();
     }
 
 
-    public LiveData<List<Meal>> getMeals(String id) {
-        Meals=MealDao.getAllFavourites(id);
+    public Flowable<List<Meal>> getMeals(String id) {
+        Meals = MealDao.getAllFavourites(id);
         return Meals;
     }
 
-    public void insert(Meal Meal) {
-        new Thread(() -> {
-            MealDao.insertItem(Meal);
-        }).start();
+    public Completable insert(Meal Meal) {
+        return MealDao.insertItem(Meal);
     }
 
-    public void delete(Meal Meal) {
-        new Thread(() -> {
-            MealDao.deleteItem(Meal);
-        }).start();
+    public Completable delete(Meal Meal) {
+        return MealDao.deleteItem(Meal);
+    }
+    public Single<Meal> getMeal(String id){
+        return MealDao.getMeal(id);
     }
 }

@@ -2,9 +2,18 @@ package eg.edu.iti.mealplaner.model.remote;
 
 import static eg.edu.iti.mealplaner.utilies.Const.BASE_URL;
 
+import android.content.Context;
+
+import java.io.File;
+
 import eg.edu.iti.mealplaner.model.models.CategoryResponse;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
+import eg.edu.iti.mealplaner.utilies.Const;
 import eg.edu.iti.mealplaner.utilies.NetworkCalls;
+import okhttp3.Cache;
+import okhttp3.Interceptor;
+import okhttp3.OkHttp;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -14,9 +23,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MealsRemoteDataSource {
     ApiService myApi;
 
-    public MealsRemoteDataSource() {
+    public MealsRemoteDataSource(Context context) {
+        Cache cache = new Cache(new File(context.getCacheDir(), "cache"), Const.CACHE_SIZE);
+        Interceptor onlineInterceptor = chain -> {
+            okhttp3.Response response = chain.proceed(chain.request());
+            return response.newBuilder()
+                    .header("Cache-Control", "public, max-age=60")
+                    .build();
+        };
+        OkHttpClient client = new OkHttpClient.Builder()
+                .cache(cache)
+                .addNetworkInterceptor(onlineInterceptor)
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         myApi = retrofit.create(ApiService.class);
@@ -58,7 +80,7 @@ public class MealsRemoteDataSource {
         });
     }
 
-    public void getFilteredDataByArea(String a, HomeNetworkCallBack homeNetworkCallBack,NetworkCalls type) {
+    public void getFilteredDataByArea(String a, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
         myApi.getFilteredListByArea(a).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
@@ -72,7 +94,7 @@ public class MealsRemoteDataSource {
         });
     }
 
-    public void getFilteredDataByCategory(String c, HomeNetworkCallBack homeNetworkCallBack,NetworkCalls type) {
+    public void getFilteredDataByCategory(String c, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
         myApi.getFilteredListByCategory(c).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
@@ -86,7 +108,7 @@ public class MealsRemoteDataSource {
         });
     }
 
-    public void getFilteredDataByIngredients(String i, HomeNetworkCallBack homeNetworkCallBack,NetworkCalls type) {
+    public void getFilteredDataByIngredients(String i, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
         myApi.getFilteredListByIngredient(i).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
@@ -99,7 +121,8 @@ public class MealsRemoteDataSource {
             }
         });
     }
-    public void getMealById(String id, HomeNetworkCallBack homeNetworkCallBack,NetworkCalls type) {
+
+    public void getMealById(String id, HomeNetworkCallBack homeNetworkCallBack, NetworkCalls type) {
         myApi.getMealById(id).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {

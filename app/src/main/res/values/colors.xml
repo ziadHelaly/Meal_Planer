@@ -5,10 +5,12 @@
     <color name="primary">#051B8D</color>
     <color name="onPrimary">#898787</color>
     <color name="line">#5A4D4D</color>
-    <color name="background">#F4EEEE</color>
+<!--    <color name="background">#F4EEEE</color>-->
+    <color name="background">#FFFFFFFF</color>
     <color name="et">#D9D9D9</color>
     <color name="start_gradient">#A52689</color>
     <color name="end_gradient">#FF8A00</color>
     <color name="textColor">#0E163F</color>
     <color name="gray">#A9A9A9</color>
+    <color name="red">#F40707</color>
 </resources>

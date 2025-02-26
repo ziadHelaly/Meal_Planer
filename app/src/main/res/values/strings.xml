@@ -36,4 +36,6 @@
     <string name="calender">Calender</string>
     <string name="favourites">Favourites</string>
     <string name="search">Search</string>
+    <string name="favourite">Favourite</string>
+    <string name="no_favourites_item_nadd_some_meals_to_show">No Favourites item \nAdd some meals to show</string>
 </resources>

@@ -23,6 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import eg.edu.iti.mealplaner.databinding.FragmentSignInBinding;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.view.HomeActivity;
 import eg.edu.iti.mealplaner.R;
@@ -31,11 +34,12 @@ import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenter;
 
 public class SignInFragment extends Fragment implements AuthPresenter.view {
     AuthPresenter presenter;
-    EditText etEmail,etPassword;
+    EditText etEmail, etPassword;
     Button btnGoogle;
     ConstraintLayout btnSingIn;
-    TextView tvSingUp,tvSignIn;
+    TextView tvSingUp, tvSignIn;
     ProgressBar progressBar;
+    FragmentSignInBinding binding;
 
     public SignInFragment() {
         // Required empty public constructor
@@ -50,20 +54,21 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sign_in, container, false);
+        binding = FragmentSignInBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter= new AuthPresenterImpl(this, RepositoryImpl.getRepository(getContext()));
-        etEmail=view.findViewById(R.id.etEmail);
-        etPassword=view.findViewById(R.id.etPassword);
-        btnSingIn=view.findViewById(R.id.btnSingUp);
-        tvSignIn=view.findViewById(R.id.tvSingUpBtn);
-        progressBar=view.findViewById(R.id.pbLoad);
-        btnGoogle=view.findViewById(R.id.btGoogle);
-        tvSingUp=view.findViewById(R.id.tvSingIn);
+        presenter = new AuthPresenterImpl(this, RepositoryImpl.getRepository(getContext()));
+        etEmail = view.findViewById(R.id.etEmail);
+        etPassword = view.findViewById(R.id.etPassword);
+        btnSingIn = view.findViewById(R.id.btnSingUp);
+        tvSignIn = view.findViewById(R.id.tvSingUpBtn);
+        progressBar = view.findViewById(R.id.pbLoad);
+        btnGoogle = view.findViewById(R.id.btGoogle);
+        tvSingUp = view.findViewById(R.id.tvSingIn);
         etEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -75,7 +80,7 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
                 if (etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty()) {
                     btnSingIn.setBackgroundResource(R.drawable.btn_shape);
                     btnSingIn.setClickable(false);
-                }else{
+                } else {
                     btnSingIn.setBackgroundResource(R.drawable.btn_active);
                     btnSingIn.setClickable(true);
                 }
@@ -97,7 +102,7 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
                 if (etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty()) {
                     btnSingIn.setBackgroundResource(R.drawable.btn_shape);
                     btnSingIn.setClickable(false);
-                }else{
+                } else {
                     btnSingIn.setBackgroundResource(R.drawable.btn_active);
                     btnSingIn.setClickable(true);
                 }
@@ -108,33 +113,34 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
 
             }
         });
-        btnSingIn.setOnClickListener(v->{
-            if (!etEmail.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()){
-                presenter.signIn(etEmail.getText().toString().trim(),etPassword.getText().toString());
+        btnSingIn.setOnClickListener(v -> {
+            if (!etEmail.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()) {
+                presenter.signIn(etEmail.getText().toString().trim(), etPassword.getText().toString());
             }
 
         });
-        tvSingUp.setOnClickListener(v->{
+        tvSingUp.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_singUpFragment);
         });
     }
-    public void setAllButtonsClickable(boolean clickable){
+
+    public void setAllButtonsClickable(boolean clickable) {
         btnGoogle.setClickable(clickable);
         btnSingIn.setClickable(clickable);
         tvSingUp.setClickable(clickable);
     }
+
     @Override
     public void onSuccess() {
-
-        Toast.makeText(getContext(),"Success",Toast.LENGTH_LONG).show();
-        Intent intent= new Intent(getActivity(), HomeActivity.class);
+        Snackbar.make(binding.getRoot(), "Failed", Snackbar.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
         getActivity().startActivity(intent);
         getActivity().finish();
     }
 
     @Override
     public void onFailure() {
-        Toast.makeText(getContext(),"Failed",Toast.LENGTH_LONG).show();
+        Snackbar.make(binding.getRoot(), "Failed", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

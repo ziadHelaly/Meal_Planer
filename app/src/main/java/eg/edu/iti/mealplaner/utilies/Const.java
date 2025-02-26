@@ -8,5 +8,7 @@ public class Const {
     public static String USER_ID;
     public static boolean isLogged;
     public static final String isLogged_TAG = "isLogged_TAG";
+    public static final int CACHE_SIZE = 10 * 1024 * 1024;
+
 
 }

@@ -13,6 +13,9 @@ import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
 import eg.edu.iti.mealplaner.model.remote.HomeNetworkCallBack;
 import eg.edu.iti.mealplaner.utilies.Const;
 import eg.edu.iti.mealplaner.utilies.NetworkCalls;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 
 public class RepositoryImpl implements Repository {
     MealsRemoteDataSource remote;
@@ -21,7 +24,7 @@ public class RepositoryImpl implements Repository {
 
     private static Repository repo = null;
     private RepositoryImpl(Context context){
-        remote= new MealsRemoteDataSource();
+        remote= new MealsRemoteDataSource(context);
         sharedPreference= new SharedPreference(context);
         local= new MealLocalDataSource(context);
     }
@@ -51,19 +54,24 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public void addMealToFav(Meal meal) {
+    public Completable addMealToFav(Meal meal) {
         meal.setUserId(Const.USER_ID);
-        local.insert(meal);
+        return local.insert(meal);
     }
 
     @Override
-    public void removeMealFromFav(Meal meal) {
-
+    public Completable removeMealFromFav(Meal meal) {
+        return local.delete(meal);
     }
 
     @Override
-    public LiveData<List<Meal>> getFavsMeals(String id) {
-        return null;
+    public Flowable<List<Meal>> getFavsMeals() {
+        return local.getMeals(Const.USER_ID);
+    }
+
+    @Override
+    public Single<Meal> getFavMealDetails(String id) {
+        return local.getMeal(id);
     }
 
     @Override

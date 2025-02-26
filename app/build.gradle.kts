@@ -56,15 +56,24 @@ dependencies {
     implementation(libs.retrofit)
     implementation (libs.converter.gson)
     implementation (libs.okhttp)
+    implementation (libs.rxjava3.retrofitadapter)
+
 
     //room
     implementation (libs.room.runtime)
     annotationProcessor (libs.room.compiler)
+    implementation (libs.room.rxjava3)
+
 
     //Glide
     implementation (libs.glide)
     annotationProcessor(libs.compiler)
+
     //youtube player
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+
+    //Rx android
+    implementation (libs.rxandroid)
+    implementation (libs.rxjava)
 
 }

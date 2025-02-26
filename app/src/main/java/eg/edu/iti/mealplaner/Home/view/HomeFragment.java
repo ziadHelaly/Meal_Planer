@@ -82,6 +82,7 @@ public class HomeFragment extends Fragment implements HomePresenter.View {
             action = HomeFragmentDirections.actionHomeFragmentToDeatilsFragment(mealOfToday.getIdMeal());
             Navigation.findNavController(view).navigate(action);
         });
+//        binding.btnAdd.setOnClickListener();
         Glide.with(getContext()).load(mealOfToday.getStrMealThumb())
                 .into(binding.ivMealOfToday);
     }
