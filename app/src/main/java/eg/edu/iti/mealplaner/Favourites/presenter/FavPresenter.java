@@ -1,7 +1,7 @@
 package eg.edu.iti.mealplaner.Favourites.presenter;
 
 import eg.edu.iti.mealplaner.model.models.Meal;
-import eg.edu.iti.mealplaner.utilies.PresenterInterface;
+import eg.edu.iti.mealplaner.presenter.PresenterInterface;
 
 public interface FavPresenter extends PresenterInterface {
     void removeFav(Meal meal);

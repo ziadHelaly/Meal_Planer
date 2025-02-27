@@ -27,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Set<Integer> hiddenFragments = new HashSet<>();
         hiddenFragments.add(R.id.deatilsFragment);
+        hiddenFragments.add(R.id.filteredFragment);
 
         navHostFragment.getNavController().addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (hiddenFragments.contains(destination.getId())) {

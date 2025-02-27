@@ -1,4 +1,4 @@
-package eg.edu.iti.mealplaner.utilies;
+package eg.edu.iti.mealplaner.presenter;
 
 import java.util.List;
 
@@ -9,5 +9,7 @@ public interface PresenterInterface {
     interface View{
         void showData(List<Meal> meals);
         void showErrorMsg(String msg);
+        void showLoadingScreen();
+        void hideLoadingScreen();
     }
 }

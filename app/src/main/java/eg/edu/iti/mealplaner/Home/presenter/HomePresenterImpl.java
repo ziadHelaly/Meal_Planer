@@ -1,6 +1,8 @@
 package eg.edu.iti.mealplaner.Home.presenter;
 
 import android.annotation.SuppressLint;
+
+import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.Repository;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -16,6 +18,26 @@ public class HomePresenterImpl implements HomePresenter {
 
     @SuppressLint("CheckResult")
     @Override
+    public void addMealToFav(Meal meal) {
+        myRepo.addMealToFav(meal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    view.showMsg("Added to Fav");
+                });
+    }
+
+    @Override
+    public void getData() {
+        view.showLoadingScreen();
+        getMealOfToday();
+        getCategories();
+        getEgyptianSection();
+        getBeefSection();
+        getVeganSection();
+    }
+
+    @SuppressLint("CheckResult")
     public void getCategories() {
         myRepo.getCategories()
                 .subscribeOn(Schedulers.io())
@@ -23,12 +45,11 @@ public class HomePresenterImpl implements HomePresenter {
                 .subscribe(
                         item -> view.displayCategories(item.getCategories()),
                         error -> {
-                    //TODO
-                }).dispose();
+                            //TODO
+                        });
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void getEgyptianSection() {
         myRepo.getFilteredDataByArea("Egyptian")
                 .subscribeOn(Schedulers.io())
@@ -37,11 +58,10 @@ public class HomePresenterImpl implements HomePresenter {
                     view.displayEgyptSection(item.getMeals());
                 }, error -> {
                     //TODO
-                }).dispose();
+                });
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void getBeefSection() {
         myRepo.getFilteredDataByCategory("Beef")
                 .subscribeOn(Schedulers.io())
@@ -50,11 +70,10 @@ public class HomePresenterImpl implements HomePresenter {
                     view.displayBeefSection(item.getMeals());
                 }, error -> {
                     //TODO
-                }).dispose();
+                });
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void getVeganSection() {
         myRepo.getFilteredDataByCategory("Vegan")
                 .subscribeOn(Schedulers.io())
@@ -63,12 +82,12 @@ public class HomePresenterImpl implements HomePresenter {
                     view.displayVeganSection(item.getMeals());
                 }, error -> {
                     //TODO
-                }).dispose();
+                });
 
     }
 
+
     @SuppressLint("CheckResult")
-    @Override
     public void getMealOfToday() {
         view.showLoadingScreen();
         myRepo.getRandomMeal()
@@ -76,9 +95,10 @@ public class HomePresenterImpl implements HomePresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                     view.displayMealOfToday(item.getMeals().get(0));
+                    view.hideLoadingScreen();
                 }, error -> {
                     //TODO
-                }).dispose();
+                });
     }
 
 }

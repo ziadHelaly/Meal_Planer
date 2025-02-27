@@ -22,6 +22,7 @@ public interface MealDao {
     @Query("select * from fav_table where idMeal = :id")
     Single<Meal> getMeal(String id);
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertItem(Meal meal);
 

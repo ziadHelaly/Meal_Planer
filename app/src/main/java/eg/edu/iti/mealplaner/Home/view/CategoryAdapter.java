@@ -12,21 +12,26 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import eg.edu.iti.mealplaner.Home.presenter.HomePresenter;
 import eg.edu.iti.mealplaner.model.models.Category;
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.databinding.AdapterCategoriesBinding;
+import eg.edu.iti.mealplaner.utilies.FilterType;
+import eg.edu.iti.mealplaner.view.OnItemClicked;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     List<Category> categories;
     Context _context;
+    OnItemClicked itemClicked;
     public void setCategories(List<Category> categories) {
         this.categories = categories;
         notifyDataSetChanged();
     }
 
-    public CategoryAdapter(List<Category> categories,Context context) {
+    public CategoryAdapter(List<Category> categories,Context context,OnItemClicked itemClicked) {
         this.categories = categories;
         _context=context;
+        this.itemClicked=itemClicked;
     }
 
     @NonNull
@@ -43,7 +48,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         Glide.with(_context).load(categories.get(position).getStrCategoryThumb())
                 .into(holder.binding.imageView2);
         holder.binding.cvItem.setOnClickListener(v->{
-
+            itemClicked.navToFilteredScreen(FilterType.Category,categories.get(position).getStrCategory());
         });
     }
 

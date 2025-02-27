@@ -103,7 +103,11 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
         binding.youtubePlayer.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.cueVideo(videoId, 0f);
+                if (videoId != null){
+                    youTubePlayer.cueVideo(videoId, 0f);
+                }else {
+                    youTubePlayer.cueVideo("9IVw7pc8a8I", 0f);
+                }
             }
 
             @Override

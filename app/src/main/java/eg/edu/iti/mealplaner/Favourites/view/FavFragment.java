@@ -73,6 +73,16 @@ public class FavFragment extends Fragment implements FavPresenter.View {
     }
 
     @Override
+    public void showLoadingScreen() {
+
+    }
+
+    @Override
+    public void hideLoadingScreen() {
+
+    }
+
+    @Override
     public void showSnackBar(String msg) {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT)
                 .setAction("UNDO", view -> {

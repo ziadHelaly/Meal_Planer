@@ -21,28 +21,29 @@ import eg.edu.iti.mealplaner.databinding.AdabterItemsBinding;
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
     List<Meal> meals;
     Context context;
+    OnItemClicked itemClicked;
 
-    public ItemsAdapter(List<Meal> meals, Context context) {
+    public ItemsAdapter(List<Meal> meals, Context context, OnItemClicked itemClicked) {
         this.meals = meals;
         this.context = context;
+        this.itemClicked=itemClicked;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View v=inflater.inflate(R.layout.adabter_items,parent,false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View v = inflater.inflate(R.layout.adabter_items, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        int width = holder.itemView.getLayoutParams().width;
         holder.binding.tvMealName.setText(meals.get(position).getStrMeal());
         Glide.with(context).load(meals.get(position).getStrMealThumb()).into(holder.binding.ivItem);
-        holder.binding.cvMeal.setOnClickListener(view->{
-            HomeFragmentDirections.ActionHomeFragmentToDeatilsFragment action;
-            action = HomeFragmentDirections.actionHomeFragmentToDeatilsFragment(meals.get(position).getIdMeal());
-            Navigation.findNavController(view).navigate(action);
+        holder.binding.cvMeal.setOnClickListener(view -> {
+            itemClicked.navToDetailsScreen(meals.get(position).getIdMeal());
         });
     }
 
@@ -51,11 +52,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         return meals.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         AdabterItemsBinding binding;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            binding=AdabterItemsBinding.bind(itemView);
+            binding = AdabterItemsBinding.bind(itemView);
         }
     }
 }

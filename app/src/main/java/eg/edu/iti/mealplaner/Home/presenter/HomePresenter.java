@@ -6,11 +6,12 @@ import eg.edu.iti.mealplaner.model.models.Category;
 import eg.edu.iti.mealplaner.model.models.Meal;
 
 public interface HomePresenter {
-    void getMealOfToday();
-    void getCategories();
-    void getEgyptianSection();
-    void getBeefSection();
-    void getVeganSection();
+
+    void addMealToFav(Meal meal);
+
+    void getData();
+
+
     public interface View{
         void showLoadingScreen();
         void hideLoadingScreen();
@@ -19,6 +20,8 @@ public interface HomePresenter {
         void displayEgyptSection(List<Meal> meals);
         void displayBeefSection(List<Meal> meals);
         void displayVeganSection(List<Meal> meals);
+
+        void showMsg(String msg);
 
     }
 }
