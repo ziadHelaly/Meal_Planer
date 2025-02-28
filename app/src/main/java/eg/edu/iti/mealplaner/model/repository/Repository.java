@@ -16,6 +16,9 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface Repository {
     void saveUserId(String id);
+
+    void onSignOut();
+
     boolean isLogged();
     String getUserID();
     Completable addMealToFav(Meal meal);

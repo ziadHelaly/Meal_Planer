@@ -2,8 +2,6 @@ package eg.edu.iti.mealplaner.model.repository;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-
 import java.util.List;
 
 import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
@@ -44,8 +42,14 @@ public class RepositoryImpl implements Repository {
         sharedPreference.saveString(id, Const.USER_ID_TAG);
         sharedPreference.setBoolean(true,Const.isLogged_TAG);
         Const.isLogged=true;
+        Const.USER_ID=id;
     }
-
+    @Override
+    public void onSignOut(){
+        sharedPreference.setBoolean(false,Const.isLogged_TAG);
+        sharedPreference.removeString(Const.USER_ID_TAG);
+        Const.isLogged=false;
+    }
     @Override
     public boolean isLogged() {
         return sharedPreference.getBoolean(Const.isLogged_TAG);

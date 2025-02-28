@@ -22,6 +22,7 @@ public class AuthPresenterImpl implements AuthPresenter {
         model.singIn(email, password).addOnCompleteListener(task->{
             if (task.isSuccessful()){
                 repo.saveUserId(task.getResult().getUser().getUid());
+                Log.d("``TAG``", "signIn: "+task.getResult().getUser().getUid());
                 view.hideProgressBar();
                 view.onSuccess();
             }else {

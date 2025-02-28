@@ -62,7 +62,14 @@
         android:id="@+id/porfileFragment"
         android:name="eg.edu.iti.mealplaner.Profile.view.PorfileFragment"
         android:label="fragment_porfile"
-        tools:layout="@layout/fragment_porfile" />
+        tools:layout="@layout/fragment_porfile" >
+        <action
+            android:id="@+id/action_porfileFragment_to_favFragment"
+            app:destination="@id/favFragment" />
+        <action
+            android:id="@+id/action_porfileFragment_to_calenderFragment"
+            app:destination="@id/calenderFragment" />
+    </fragment>
     <fragment
         android:id="@+id/calenderFragment"
         android:name="eg.edu.iti.mealplaner.calender.view.CalenderFragment"

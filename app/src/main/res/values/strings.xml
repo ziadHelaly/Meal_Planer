@@ -42,4 +42,8 @@
     <string name="wrtie">search with category, country, ingredient</string>
     <string name="countery">Country</string>
     <string name="search_with_name">Enter Meal name</string>
+    <string name="signout">SignOut</string>
+    <string name="User">User</string>
+    <string name="to_favourites">To Favourites</string>
+    <string name="to_plans">To Plans</string>
 </resources>
