@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import eg.edu.iti.mealplaner.model.models.CategoryResponse;
+import eg.edu.iti.mealplaner.model.models.Country;
+import eg.edu.iti.mealplaner.model.models.FilterList;
+import eg.edu.iti.mealplaner.model.models.Ingredient;
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
 import io.reactivex.rxjava3.core.Completable;
@@ -25,4 +28,6 @@ public interface Repository {
     Single<MealsResponse>  getFilteredDataByArea(String a);
     Single<MealsResponse>  getFilteredDataByCategory(String c);
     Single<MealsResponse>  getFilteredDataByIngradiants(String i);
+    Single<FilterList<Ingredient>> getIngredientsFilterList();
+    Single<FilterList<Country>> getCountriesFilterList();
 }

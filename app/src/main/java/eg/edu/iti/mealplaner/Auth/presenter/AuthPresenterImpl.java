@@ -1,5 +1,7 @@
 package eg.edu.iti.mealplaner.Auth.presenter;
 
+import android.util.Log;
+
 import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
 import eg.edu.iti.mealplaner.model.repository.Repository;
 

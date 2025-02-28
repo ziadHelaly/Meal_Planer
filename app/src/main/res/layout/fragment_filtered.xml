@@ -21,13 +21,13 @@
         android:id="@+id/rvItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:paddingBottom="100dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
+        android:paddingBottom="100dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCategoryName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText"
         app:spanCount="2" />
 
     <ImageView
@@ -60,4 +60,16 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/loading" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawableEnd="@drawable/ic_search"
+        android:ems="10"
+        android:hint="@string/search_with_name"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCategoryName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

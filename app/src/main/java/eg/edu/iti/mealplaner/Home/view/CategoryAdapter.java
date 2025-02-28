@@ -33,6 +33,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         _context=context;
         this.itemClicked=itemClicked;
     }
+    public CategoryAdapter(Context context,OnItemClicked itemClicked) {
+        _context=context;
+        this.itemClicked=itemClicked;
+    }
 
     @NonNull
     @Override

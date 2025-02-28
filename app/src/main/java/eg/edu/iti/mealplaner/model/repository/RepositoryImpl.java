@@ -9,6 +9,9 @@ import java.util.List;
 import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
 import eg.edu.iti.mealplaner.model.local.SharedPreference;
 import eg.edu.iti.mealplaner.model.models.CategoryResponse;
+import eg.edu.iti.mealplaner.model.models.Country;
+import eg.edu.iti.mealplaner.model.models.FilterList;
+import eg.edu.iti.mealplaner.model.models.Ingredient;
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
 import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
@@ -102,6 +105,16 @@ public class RepositoryImpl implements Repository {
     @Override
     public Single<MealsResponse>  getFilteredDataByIngradiants(String i) {
         return remote.getFilteredDataByIngredients(i);
+    }
+
+    @Override
+    public Single<FilterList<Ingredient>> getIngredientsFilterList() {
+        return remote.getIngredientsList();
+    }
+
+    @Override
+    public Single<FilterList<Country>> getCountriesFilterList() {
+        return remote.getCountriesList();
     }
 
 }

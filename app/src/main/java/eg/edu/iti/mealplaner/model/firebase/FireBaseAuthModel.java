@@ -12,5 +12,8 @@ public class FireBaseAuthModel {
     public Task<AuthResult> singUp(String email, String password) {
         return FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password);
     }
+    public void signOut() {
+         FirebaseAuth.getInstance().signOut();
+    }
 
 }

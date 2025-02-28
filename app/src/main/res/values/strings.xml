@@ -39,6 +39,7 @@
     <string name="favourite">Favourite</string>
     <string name="no_favourites_item_nadd_some_meals_to_show">No Favourites item \nAdd some meals to show</string>
     <string name="category">Category</string>
-    <string name="wrtie">search with category, countery, ingerdient</string>
-    <string name="countery">Countery</string>
+    <string name="wrtie">search with category, country, ingredient</string>
+    <string name="countery">Country</string>
+    <string name="search_with_name">Enter Meal name</string>
 </resources>

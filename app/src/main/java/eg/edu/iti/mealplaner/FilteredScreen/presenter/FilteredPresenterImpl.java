@@ -2,15 +2,22 @@ package eg.edu.iti.mealplaner.FilteredScreen.presenter;
 
 import android.annotation.SuppressLint;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.Repository;
 import eg.edu.iti.mealplaner.utilies.FilterType;
 import eg.edu.iti.mealplaner.presenter.PresenterInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FilteredPresenterImpl implements FilteredPresenter {
     PresenterInterface.View view;
     Repository repo;
+    List<Meal> meals=new ArrayList<>();
+    Observable<Meal> observable=Observable.fromIterable(meals);
 
     public FilteredPresenterImpl(View view, Repository repo) {
         this.view = view;
@@ -36,6 +43,10 @@ public class FilteredPresenterImpl implements FilteredPresenter {
         }
     }
 
+    public void searchByName(String search){
+        Observable<Meal> observable=Observable.fromIterable(meals);
+
+    }
     @SuppressLint("CheckResult")
     private void getByCategory(String c) {
         repo.getFilteredDataByCategory(c)
@@ -44,6 +55,8 @@ public class FilteredPresenterImpl implements FilteredPresenter {
                 .subscribe(item -> {
                     view.hideLoadingScreen();
                     view.showData(item.getMeals());
+                    meals=item.getMeals();
+                    observable=Observable.fromIterable(meals);
                 });
     }
 
@@ -55,6 +68,8 @@ public class FilteredPresenterImpl implements FilteredPresenter {
                 .subscribe(item -> {
                     view.hideLoadingScreen();
                     view.showData(item.getMeals());
+                    meals=item.getMeals();
+                    observable=Observable.fromIterable(meals);
                 });
     }
 
@@ -66,6 +81,8 @@ public class FilteredPresenterImpl implements FilteredPresenter {
                 .subscribe(item -> {
                     view.hideLoadingScreen();
                     view.showData(item.getMeals());
+                    meals=item.getMeals();
+                    observable=Observable.fromIterable(meals);
                 });
     }
 }

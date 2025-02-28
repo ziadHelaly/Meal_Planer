@@ -39,7 +39,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int width = holder.itemView.getLayoutParams().width;
         holder.binding.tvMealName.setText(meals.get(position).getStrMeal());
         Glide.with(context).load(meals.get(position).getStrMealThumb()).into(holder.binding.ivItem);
         holder.binding.cvMeal.setOnClickListener(view -> {

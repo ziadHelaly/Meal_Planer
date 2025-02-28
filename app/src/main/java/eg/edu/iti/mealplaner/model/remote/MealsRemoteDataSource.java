@@ -6,7 +6,11 @@ import android.content.Context;
 
 import java.io.File;
 
+import eg.edu.iti.mealplaner.model.models.Category;
 import eg.edu.iti.mealplaner.model.models.CategoryResponse;
+import eg.edu.iti.mealplaner.model.models.Country;
+import eg.edu.iti.mealplaner.model.models.FilterList;
+import eg.edu.iti.mealplaner.model.models.Ingredient;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
 import eg.edu.iti.mealplaner.utilies.Const;
 import io.reactivex.rxjava3.core.Single;
@@ -73,4 +77,10 @@ public class MealsRemoteDataSource {
         return myApi.getMealById(id);
     }
 
+    public Single<FilterList<Country>> getCountriesList(){
+        return myApi.getCountryList("list");
+    }
+    public Single<FilterList<Ingredient>> getIngredientsList(){
+        return myApi.getIngredientsList("list");
+    }
 }
