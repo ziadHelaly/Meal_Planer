@@ -39,6 +39,7 @@ import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.Details.presenter.DetailsPresenter;
 import eg.edu.iti.mealplaner.Details.presenter.DetailsPresenterImpl;
 import eg.edu.iti.mealplaner.databinding.FragmentDeatilsBinding;
+import eg.edu.iti.mealplaner.utilies.CalenderUtil;
 
 
 public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
@@ -46,7 +47,7 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
     FragmentDeatilsBinding binding;
     String id;
     DetailsPresenter presenter;
-    boolean isFav=false;
+    boolean isFav = false;
 
     public DeatilsFragment() {
         // Required empty public constructor
@@ -90,9 +91,9 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
     @Override
     public void showData(Meal meal) {
         binding.ivFav.setOnClickListener(v -> {
-            if (!isFav){
+            if (!isFav) {
                 presenter.addMealToFav(meal);
-            }else {
+            } else {
                 presenter.removeFromFav(meal);
             }
         });
@@ -111,9 +112,9 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
         binding.youtubePlayer.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                if (videoId != null){
+                if (videoId != null) {
                     youTubePlayer.cueVideo(videoId, 0f);
-                }else {
+                } else {
                     youTubePlayer.cueVideo("9IVw7pc8a8I", 0f);
                 }
             }
@@ -124,36 +125,37 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
                 Toast.makeText(getContext(), "youtube error " + error.name(), Toast.LENGTH_SHORT).show();
             }
         });
-        binding.ivPlan.setOnClickListener(v->{
-            setupDatePicker();
+        binding.ivPlan.setOnClickListener(v -> {
+            setupDatePicker(meal);
         });
 
     }
-    private void setupDatePicker(){
+
+    private void setupDatePicker(Meal meal) {
         // Get current date
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        // Create DatePickerDialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                getContext(),R.style.CustomDatePickerDialogTheme,
+                getContext(), R.style.CustomDatePickerDialogTheme,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Log.d("```TAG```", "onDateSet: ");
-                        String formattedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
-                        Log.d("``TAG``", "setupDatePicker: "+formattedDate);
-                        Toast.makeText(getActivity(), formattedDate, Toast.LENGTH_SHORT).show();
+                        String formattedDate = CalenderUtil.getFormattedDate(dayOfMonth,month,year);
+                        presenter.addToPlans(meal, formattedDate);
                     }
                 },
                 year, month, day
         );
 
         datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        calendar.add(Calendar.DAY_OF_YEAR , 6);
+        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
         datePickerDialog.show();
     }
+
     @Override
     public void showSnackBar(String msg) {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT)
@@ -163,13 +165,13 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
     @Override
     public void onAddToFav() {
         binding.ivFav.setImageResource(R.drawable.ic_filled_fav);
-        isFav=true;
+        isFav = true;
     }
 
     @Override
     public void onRemoveFromFav() {
         binding.ivFav.setImageResource(R.drawable.ic_fav);
-        isFav=false;
+        isFav = false;
     }
 
 

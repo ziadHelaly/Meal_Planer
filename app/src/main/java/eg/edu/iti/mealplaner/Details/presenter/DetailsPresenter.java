@@ -15,6 +15,9 @@ public interface DetailsPresenter {
 
     String extractYouTubeVideoId(String videoUrl);
 
+    @SuppressLint("CheckResult")
+    void addToPlans(Meal meal, String date);
+
     interface View{
         void showData(Meal meal);
         void showSnackBar(String msg);

@@ -12,6 +12,7 @@ import eg.edu.iti.mealplaner.model.models.FilterList;
 import eg.edu.iti.mealplaner.model.models.Ingredient;
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
+import eg.edu.iti.mealplaner.model.models.Plan;
 import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
 import eg.edu.iti.mealplaner.utilies.Const;
 import io.reactivex.rxjava3.core.Completable;
@@ -24,14 +25,16 @@ public class RepositoryImpl implements Repository {
     SharedPreference sharedPreference;
 
     private static Repository repo = null;
-    private RepositoryImpl(Context context){
-        remote= new MealsRemoteDataSource(context);
-        sharedPreference= new SharedPreference(context);
-        local= new MealLocalDataSource(context);
+
+    private RepositoryImpl(Context context) {
+        remote = new MealsRemoteDataSource(context);
+        sharedPreference = new SharedPreference(context);
+        local = new MealLocalDataSource(context);
     }
+
     public static Repository getRepository(Context context) {
-        if (repo ==null){
-            repo =new RepositoryImpl(context);
+        if (repo == null) {
+            repo = new RepositoryImpl(context);
         }
         return repo;
     }
@@ -40,41 +43,46 @@ public class RepositoryImpl implements Repository {
     @Override
     public void saveUserId(String id) {
         sharedPreference.saveString(id, Const.USER_ID_TAG);
-        sharedPreference.setBoolean(true,Const.isLogged_TAG);
-        Const.isLogged=true;
-        Const.USER_ID=id;
+        sharedPreference.setBoolean(true, Const.isLogged_TAG);
+        Const.isLogged = true;
+        Const.USER_ID = id;
     }
 
     @Override
     public void saveUserName(String username) {
-        sharedPreference.saveString(username,Const.USER_NAME_TAG);
-        Const.USER_NAME=username;
+        sharedPreference.saveString(username, Const.USER_NAME_TAG);
+        Const.USER_NAME = username;
     }
+
     @Override
     public void getUserName() {
         sharedPreference.getString(Const.USER_NAME_TAG);
     }
 
     @Override
-    public void onSignOut(){
-        sharedPreference.setBoolean(false,Const.isLogged_TAG);
+    public void onSignOut() {
+        sharedPreference.setBoolean(false, Const.isLogged_TAG);
         sharedPreference.removeString(Const.USER_ID_TAG);
-        Const.isLogged=false;
-        Const.USER_NAME="Null";
+        Const.isLogged = false;
+        Const.USER_NAME = "Null";
     }
+
     @Override
     public boolean isLogged() {
         return sharedPreference.getBoolean(Const.isLogged_TAG);
     }
 
+
     @Override
     public String getUserID() {
         return sharedPreference.getString(Const.USER_ID_TAG);
     }
+
     @Override
-    public Single<Integer> isFavourite(String id){
+    public Single<Integer> isFavourite(String id) {
         return local.isFavourite(id);
     }
+
     @Override
     public Completable addMealToFav(Meal meal) {
         meal.setUserId(Const.USER_ID);
@@ -98,11 +106,12 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public Single<MealsResponse>  getRandomMeal(){
+    public Single<MealsResponse> getRandomMeal() {
         return remote.getRandomMeal();
     }
+
     @Override
-    public Single<CategoryResponse> getCategories(){
+    public Single<CategoryResponse> getCategories() {
         return remote.getCategories();
     }
 
@@ -112,17 +121,17 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public Single<MealsResponse>  getFilteredDataByArea(String a){
+    public Single<MealsResponse> getFilteredDataByArea(String a) {
         return remote.getFilteredDataByArea(a);
     }
 
     @Override
-    public Single<MealsResponse>  getFilteredDataByCategory(String c) {
+    public Single<MealsResponse> getFilteredDataByCategory(String c) {
         return remote.getFilteredDataByCategory(c);
     }
 
     @Override
-    public Single<MealsResponse>  getFilteredDataByIngradiants(String i) {
+    public Single<MealsResponse> getFilteredDataByIngradiants(String i) {
         return remote.getFilteredDataByIngredients(i);
     }
 
@@ -136,4 +145,16 @@ public class RepositoryImpl implements Repository {
         return remote.getCountriesList();
     }
 
+    @Override
+    public Flowable<List<Plan>> getPlansByDay(String userId, String day) {
+        return local.getPlans(userId, day);
+    }
+    @Override
+    public Completable addPlan(Plan plan) {
+        return local.addPlan(plan);
+    }
+    @Override
+    public Completable removePlan(Plan plan) {
+        return local.removePlan(plan);
+    }
 }

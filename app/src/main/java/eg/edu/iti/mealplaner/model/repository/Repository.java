@@ -10,6 +10,7 @@ import eg.edu.iti.mealplaner.model.models.FilterList;
 import eg.edu.iti.mealplaner.model.models.Ingredient;
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
+import eg.edu.iti.mealplaner.model.models.Plan;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -39,4 +40,10 @@ public interface Repository {
     Single<MealsResponse>  getFilteredDataByIngradiants(String i);
     Single<FilterList<Ingredient>> getIngredientsFilterList();
     Single<FilterList<Country>> getCountriesFilterList();
+
+    Flowable<List<Plan>> getPlansByDay(String userId, String day);
+
+    Completable addPlan(Plan plan);
+
+    Completable removePlan(Plan plan);
 }

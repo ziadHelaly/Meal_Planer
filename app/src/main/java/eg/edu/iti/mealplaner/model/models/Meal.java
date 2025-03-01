@@ -16,8 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity(tableName = "fav_table")
+@Entity(tableName = "fav_table",primaryKeys = {"userId","idMeal"})
 public class Meal {
+    public Meal() {
+        userId = "";
+        idMeal = "";
+    }
+
     @Override
     public String toString() {
         return "Meal{" +
@@ -46,6 +51,7 @@ public class Meal {
 
         return ingredientMeasureList;
     }
+
     public String getUserId() {
         return userId;
     }
@@ -54,8 +60,9 @@ public class Meal {
         this.userId = userId;
     }
 
+    @NonNull
     private String userId;
-    @PrimaryKey
+
     @SerializedName("idMeal")
     @NonNull
     @Expose

@@ -7,7 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.models.Plan;
 import eg.edu.iti.mealplaner.model.repository.Repository;
+import eg.edu.iti.mealplaner.utilies.Const;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -80,6 +82,23 @@ public class DetailsPresenterImpl implements DetailsPresenter {
         Pattern compiledPattern = Pattern.compile(pattern);
         Matcher matcher = compiledPattern.matcher(videoUrl);
         return matcher.find() ? matcher.group(1) : null;
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void addToPlans(Meal meal, String date) {
+
+        repo.addPlan(new Plan(
+                        Const.USER_ID,
+                        meal.getIdMeal(),
+                        meal.getStrMealThumb(),
+                        meal.getStrMeal(),
+                        date
+                )).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    view.showSnackBar("Added to plans " + date);
+                });
     }
 
 }

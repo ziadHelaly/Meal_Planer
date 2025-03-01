@@ -22,11 +22,12 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
     List<Meal> meals;
     Context context;
     FavPresenter presenter;
+    OnFavRemoveItemClick itemClick;
 
-    public FavAdapter(List<Meal> meals, Context context, FavPresenter favPresenter) {
+    public FavAdapter(List<Meal> meals, Context context, OnFavRemoveItemClick itemClick) {
         this.meals = meals;
         this.context = context;
-        presenter=favPresenter;
+        this.itemClick=itemClick;
     }
 
     @NonNull
@@ -47,7 +48,8 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
             Navigation.findNavController(view).navigate(action);
         });
         holder.binding.removeBg.setOnClickListener(view->{
-            presenter.removeFav(meals.get(position));
+
+            itemClick.removeItem(meals.get(position));
         });
     }
 

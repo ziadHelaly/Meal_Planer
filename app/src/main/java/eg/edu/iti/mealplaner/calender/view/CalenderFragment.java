@@ -2,65 +2,89 @@ package eg.edu.iti.mealplaner.calender.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 import eg.edu.iti.mealplaner.R;
+import eg.edu.iti.mealplaner.calender.presenter.CalenderPresenter;
+import eg.edu.iti.mealplaner.calender.presenter.CalenderPresenterImpl;
+import eg.edu.iti.mealplaner.databinding.FragmentCalenderBinding;
+import eg.edu.iti.mealplaner.model.models.Plan;
+import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
+import eg.edu.iti.mealplaner.utilies.CalenderUtil;
+import eg.edu.iti.mealplaner.view.OnItemClicked;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CalenderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class CalenderFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+public class CalenderFragment extends Fragment implements CalenderPresenter.View ,OnPlanRemoved, OnItemClicked {
+    FragmentCalenderBinding binding;
+    CalenderPresenter presenter;
     public CalenderFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CalenderFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CalenderFragment newInstance(String param1, String param2) {
-        CalenderFragment fragment = new CalenderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calender, container, false);
+        binding=FragmentCalenderBinding.inflate(inflater,container,false);
+        return binding.getRoot();
+    }
+    PlansAdapter adapter;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        presenter= new CalenderPresenterImpl(RepositoryImpl.getRepository(getContext()),this);
+        binding.calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                String date=CalenderUtil.getFormattedDate(dayOfMonth, month, year);
+                presenter.getPlansByDay(date);
+            }
+        });
+        adapter=new PlansAdapter(getContext(),this,this);
+        binding.rvPlans.setAdapter(adapter);
+    }
+
+    @Override
+    public void showPlansByDay(List<Plan> plans) {
+        adapter.setPlans(plans);
+    }
+
+    @Override
+    public void showMsg(String msg) {
+        Snackbar.make(getView(),msg,Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showRemovedMessage(String msg) {
+        Snackbar.make(getView(),msg,Snackbar.LENGTH_SHORT).setAction("UNDO",v->{
+            presenter.redoPlan();
+        }).show();
+    }
+
+    @Override
+    public void removePlan(Plan plan) {
+        presenter.removePlan(plan);
+    }
+    @Override
+    public void navToDetailsScreen(String id){
+
     }
 }

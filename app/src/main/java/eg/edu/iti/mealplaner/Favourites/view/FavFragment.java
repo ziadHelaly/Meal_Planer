@@ -25,7 +25,7 @@ import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 
 
-public class FavFragment extends Fragment implements FavPresenter.View {
+public class FavFragment extends Fragment implements FavPresenter.View,OnFavRemoveItemClick {
 
     FragmentFavBinding binding;
     FavPresenter presenter;
@@ -62,7 +62,7 @@ public class FavFragment extends Fragment implements FavPresenter.View {
         }else {
             binding.tvNoItems.setVisibility(GONE);
         }
-        binding.rvFavs.setAdapter(new FavAdapter(meals, getContext(), presenter));
+        binding.rvFavs.setAdapter(new FavAdapter(meals, getContext(), this));
 
     }
 
@@ -94,5 +94,10 @@ public class FavFragment extends Fragment implements FavPresenter.View {
     @Override
     public void showLoading() {
 
+    }
+
+    @Override
+    public void removeItem(Meal meal) {
+        presenter.removeFav(meal);
     }
 }
