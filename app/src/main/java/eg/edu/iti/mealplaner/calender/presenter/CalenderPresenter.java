@@ -16,5 +16,6 @@ public interface CalenderPresenter {
 
         void showMsg(String error);
         void showRemovedMessage(String msg);
+        void showOnGuestMode();
     }
 }

@@ -1,6 +1,7 @@
 package eg.edu.iti.mealplaner.Details.presenter;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 
 import java.util.regex.Matcher;
@@ -26,40 +27,61 @@ public class DetailsPresenterImpl implements DetailsPresenter {
     @Override
     public void getData(String id) {
         view.showLoading();
-        repo.getMealById(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    view.hideLoading();
-                    view.showData(item.getMeals().get(0));
-                }, error -> {
-                    //TODO
-                });
+        Log.d("``TAG``", "getData: "+isFav);
+        if (isFav){
+            repo.getFavMealDetails(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(item -> {
+                        view.hideLoading();
+                        view.showData(item);
+                    }, error -> {
+                        view.showSnackBar("Error");
+                    });
+        }else{
+            repo.getMealById(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(item -> {
+                        view.hideLoading();
+                        view.showData(item.getMeals().get(0));
+                    }, error -> {
+                        view.showSnackBar("Error");
+                    });
+        }
     }
-
+    boolean isFav=false;
     @SuppressLint("CheckResult")
     @Override
     public void isFavourite(String id) {
-        repo.isFavourite(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    if (item > 0) {
-                        view.onAddToFav();
-                    }
-                });
+        if (Const.isLogged){
+            repo.isFavourite(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(item -> {
+                        if (item > 0) {
+                            view.onAddToFav();
+                            isFav=true;
+                        }
+                        getData(id);
+                    });
+        }
     }
 
     @SuppressLint("CheckResult")
     @Override
     public void addMealToFav(Meal meal) {
-        repo.addMealToFav(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    view.showSnackBar("Added Successfully to favourites");
-                    view.onAddToFav();
-                });
+        if (Const.isLogged){
+            repo.addMealToFav(meal)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                        view.showSnackBar("Added Successfully to favourites");
+                        view.onAddToFav();
+                    });
+        }else{
+            view.showSnackBar("SignIn to use this Feature");
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -87,18 +109,22 @@ public class DetailsPresenterImpl implements DetailsPresenter {
     @SuppressLint("CheckResult")
     @Override
     public void addToPlans(Meal meal, String date) {
-
-        repo.addPlan(new Plan(
-                        Const.USER_ID,
-                        meal.getIdMeal(),
-                        meal.getStrMealThumb(),
-                        meal.getStrMeal(),
-                        date
-                )).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    view.showSnackBar("Added to plans " + date);
-                });
+        if (Const.isLogged){
+            repo.addPlan(new Plan(
+                            Const.USER_ID,
+                            meal.getIdMeal(),
+                            meal.getStrMealThumb(),
+                            meal.getStrMeal(),
+                            date
+                    )).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                        view.showSnackBar("Added to plans " + date);
+                    });
+        }else {
+            view.showSnackBar("SignIn to use this Feature");
+        }
     }
+
 
 }

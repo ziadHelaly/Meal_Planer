@@ -55,6 +55,8 @@ public class SearchPresenterImpl implements SearchPresenter {
                 .subscribe(
                         item -> {
                             categories = item.getCategories();
+                        },error->{
+                            view.showErrorMsg("Can't get data");
                         });
     }
 
@@ -66,6 +68,8 @@ public class SearchPresenterImpl implements SearchPresenter {
                 .subscribe(
                         item -> {
                             countries = item.getMeals();
+                        },error->{
+                            view.showErrorMsg("Can't get data");
                         });
     }
 
@@ -77,6 +81,8 @@ public class SearchPresenterImpl implements SearchPresenter {
                 .subscribe(
                         item -> {
                             ingredients = item.getMeals();
+                        },error->{
+                            view.showErrorMsg("Can't get data");
                         });
     }
 

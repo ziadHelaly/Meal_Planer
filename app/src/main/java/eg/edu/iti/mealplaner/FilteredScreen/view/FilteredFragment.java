@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +63,22 @@ public class FilteredFragment extends Fragment implements FilteredPresenter.View
         binding.tvCategoryName.setText(name+" Category");
         binding.backBtn.setOnClickListener(v -> {
             Navigation.findNavController(view).popBackStack();
+        });
+        binding.editTextText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.searchByName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
     }
 

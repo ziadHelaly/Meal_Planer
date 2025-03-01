@@ -16,6 +16,9 @@ public class CalenderPresenterImpl implements CalenderPresenter {
     public CalenderPresenterImpl(Repository repo, View view) {
         this.repo = repo;
         this.view = view;
+        if (!Const.isLogged){
+            view.showOnGuestMode();
+        }
     }
 
     @SuppressLint("CheckResult")

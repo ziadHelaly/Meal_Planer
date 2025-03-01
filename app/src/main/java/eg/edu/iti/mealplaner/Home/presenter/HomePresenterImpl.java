@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.Repository;
+import eg.edu.iti.mealplaner.utilies.Const;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -19,12 +20,16 @@ public class HomePresenterImpl implements HomePresenter {
     @SuppressLint("CheckResult")
     @Override
     public void addMealToFav(Meal meal) {
-        myRepo.addMealToFav(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    view.showMsg("Added to Fav");
-                });
+        if (Const.isLogged){
+            myRepo.addMealToFav(meal)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                        view.showMsg("Added to Fav");
+                    },throwable -> view.showMsg(throwable.getMessage()));
+        }else {
+            view.showMsg("SignIn to use favourites");
+        }
     }
 
     @Override

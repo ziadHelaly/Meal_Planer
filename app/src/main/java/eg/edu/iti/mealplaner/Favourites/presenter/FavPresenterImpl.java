@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.Repository;
+import eg.edu.iti.mealplaner.utilies.Const;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -15,6 +16,9 @@ public class FavPresenterImpl implements FavPresenter {
     public FavPresenterImpl(View view, Repository repo) {
         this.view = view;
         this.repo = repo;
+        if (!Const.isLogged){
+            view.showOnGuestMode();
+        }
     }
 
     @SuppressLint("CheckResult")

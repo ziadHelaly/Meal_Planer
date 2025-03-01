@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import eg.edu.iti.mealplaner.Auth.view.AuthActivity;
 import eg.edu.iti.mealplaner.Profile.presenter.ProfilePresenter;
 import eg.edu.iti.mealplaner.Profile.presenter.ProfilePresenterImpl;
@@ -38,11 +40,12 @@ public class PorfileFragment extends Fragment implements ProfilePresenter.View{
         super.onCreate(savedInstanceState);
 
     }
-
+    ViewGroup container;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        this.container=container;
         binding=FragmentPorfileBinding.inflate(inflater,container,false);
         return binding.getRoot();
     }
@@ -51,15 +54,28 @@ public class PorfileFragment extends Fragment implements ProfilePresenter.View{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter=new ProfilePresenterImpl(new FireBaseAuthModel(), RepositoryImpl.getRepository(getContext()),this);
-        binding.textView12.setText(Const.USER_NAME);
+        binding.textView12.setText((Const.USER_NAME == null||Const.USER_NAME.equals("Null") )? "Guest":Const.USER_NAME);
+        binding.btnSignOut.setText((Const.isLogged)?"SignOut":"SignIn");
         binding.btnFavourites.setOnClickListener(v->{
-            Navigation.findNavController(view).navigate(R.id.action_porfileFragment_to_favFragment);
+            if (Const.isLogged){
+                Navigation.findNavController(view).navigate(R.id.action_porfileFragment_to_favFragment);
+            }else{
+                Snackbar.make(view,"Sign in to access this feature",Snackbar.LENGTH_SHORT).show();
+            }
         });
         binding.btnPlans.setOnClickListener(v->{
-            Navigation.findNavController(view).navigate(R.id.action_porfileFragment_to_calenderFragment);
+            if (Const.isLogged){
+                Navigation.findNavController(container).navigate(R.id.action_porfileFragment_to_calenderFragment);
+            }else{
+                Snackbar.make(view,"Sign in to access this feature",Snackbar.LENGTH_SHORT).show();
+            }
         });
         binding.btnSignOut.setOnClickListener(v -> {
-            presenter.signOut();
+            if (Const.isLogged){
+                presenter.signOut();
+            }else {
+                onSignOut();
+            }
         });
     }
 

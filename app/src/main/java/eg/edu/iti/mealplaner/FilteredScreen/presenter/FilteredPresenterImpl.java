@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.Repository;
@@ -42,9 +43,13 @@ public class FilteredPresenterImpl implements FilteredPresenter {
             }
         }
     }
-
+    List<Meal> result=new ArrayList<>();
+    @Override
     public void searchByName(String search){
-        Observable<Meal> observable=Observable.fromIterable(meals);
+        result=meals.stream()
+                .filter(string->(string.getStrMeal().toLowerCase().contains(search)))
+                .collect(Collectors.toList());
+        view.showData(result);
 
     }
     @SuppressLint("CheckResult")

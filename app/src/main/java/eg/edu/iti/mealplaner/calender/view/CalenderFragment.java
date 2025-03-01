@@ -1,5 +1,7 @@
 package eg.edu.iti.mealplaner.calender.view;
 
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,6 +53,9 @@ public class CalenderFragment extends Fragment implements CalenderPresenter.View
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter= new CalenderPresenterImpl(RepositoryImpl.getRepository(getContext()),this);
+        adapter=new PlansAdapter(getContext(),this,this);
+        binding.rvPlans.setAdapter(adapter);
+        presenter.getPlansByDay(CalenderUtil.getToday());
         binding.calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -58,8 +63,7 @@ public class CalenderFragment extends Fragment implements CalenderPresenter.View
                 presenter.getPlansByDay(date);
             }
         });
-        adapter=new PlansAdapter(getContext(),this,this);
-        binding.rvPlans.setAdapter(adapter);
+
     }
 
     @Override
@@ -77,6 +81,11 @@ public class CalenderFragment extends Fragment implements CalenderPresenter.View
         Snackbar.make(getView(),msg,Snackbar.LENGTH_SHORT).setAction("UNDO",v->{
             presenter.redoPlan();
         }).show();
+    }
+
+    @Override
+    public void showOnGuestMode() {
+        binding.guest.setVisibility(VISIBLE);
     }
 
     @Override

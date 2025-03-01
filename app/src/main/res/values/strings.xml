@@ -48,4 +48,5 @@
     <string name="to_plans">To Plans</string>
     <string name="countinue_as_guest">Countinue as Guest</string>
     <string name="default_web_client_id">AIzaSyBooiqNEe_kzbM71CJJEvFr_0HMCXZ6AhM</string>
+    <string name="sign_in_to_use_this_feature">Sign in to use this Feature</string>
 </resources>

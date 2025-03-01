@@ -7,6 +7,8 @@ public interface FavPresenter extends PresenterInterface {
     void removeFav(Meal meal);
     void redoMeal();
     interface View extends PresenterInterface.View{
+        void showOnGuestMode();
+
         void showSnackBar(String msg);
 
         void showLoading();

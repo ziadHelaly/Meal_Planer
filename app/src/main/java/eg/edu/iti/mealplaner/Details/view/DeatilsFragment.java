@@ -40,6 +40,7 @@ import eg.edu.iti.mealplaner.Details.presenter.DetailsPresenter;
 import eg.edu.iti.mealplaner.Details.presenter.DetailsPresenterImpl;
 import eg.edu.iti.mealplaner.databinding.FragmentDeatilsBinding;
 import eg.edu.iti.mealplaner.utilies.CalenderUtil;
+import eg.edu.iti.mealplaner.utilies.Const;
 
 
 public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
@@ -73,7 +74,6 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.getData(id);
         presenter.isFavourite(id);
         binding.back.setOnClickListener(v -> {
             Navigation.findNavController(view).popBackStack();
@@ -126,7 +126,11 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
             }
         });
         binding.ivPlan.setOnClickListener(v -> {
-            setupDatePicker(meal);
+            if (Const.isLogged){
+                setupDatePicker(meal);
+            }else {
+                showSnackBar("SignIn to use this Feature");
+            }
         });
 
     }
