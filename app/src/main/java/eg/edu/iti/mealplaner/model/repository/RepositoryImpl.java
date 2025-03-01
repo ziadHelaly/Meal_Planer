@@ -44,11 +44,23 @@ public class RepositoryImpl implements Repository {
         Const.isLogged=true;
         Const.USER_ID=id;
     }
+
+    @Override
+    public void saveUserName(String username) {
+        sharedPreference.saveString(username,Const.USER_NAME_TAG);
+        Const.USER_NAME=username;
+    }
+    @Override
+    public void getUserName() {
+        sharedPreference.getString(Const.USER_NAME_TAG);
+    }
+
     @Override
     public void onSignOut(){
         sharedPreference.setBoolean(false,Const.isLogged_TAG);
         sharedPreference.removeString(Const.USER_ID_TAG);
         Const.isLogged=false;
+        Const.USER_NAME="Null";
     }
     @Override
     public boolean isLogged() {
@@ -59,7 +71,10 @@ public class RepositoryImpl implements Repository {
     public String getUserID() {
         return sharedPreference.getString(Const.USER_ID_TAG);
     }
-
+    @Override
+    public Single<Integer> isFavourite(String id){
+        return local.isFavourite(id);
+    }
     @Override
     public Completable addMealToFav(Meal meal) {
         meal.setUserId(Const.USER_ID);

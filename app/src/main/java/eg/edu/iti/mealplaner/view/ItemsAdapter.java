@@ -18,7 +18,7 @@ import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.databinding.AdabterItemsBinding;
 
-public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
+public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder>  {
     List<Meal> meals;
     Context context;
     OnItemClicked itemClicked;

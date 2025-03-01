@@ -23,10 +23,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.snackbar.Snackbar;
 
 import eg.edu.iti.mealplaner.databinding.FragmentSignInBinding;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
+import eg.edu.iti.mealplaner.utilies.Const;
 import eg.edu.iti.mealplaner.view.HomeActivity;
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenterImpl;
@@ -40,6 +44,8 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
     TextView tvSingUp, tvSignIn;
     ProgressBar progressBar;
     FragmentSignInBinding binding;
+    private GoogleSignInClient googleSignInClient;
+
 
     public SignInFragment() {
         // Required empty public constructor
@@ -122,6 +128,19 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
         tvSingUp.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_singUpFragment);
         });
+        binding.btnGuest.setOnClickListener(v -> {
+            presenter.guestMode();
+
+        });
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+        binding.btGoogle.setOnClickListener(v->{
+            signInWithGoogle();
+        });
     }
 
     public void setAllButtonsClickable(boolean clickable) {
@@ -130,9 +149,20 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
         tvSingUp.setClickable(clickable);
     }
 
+    private void signInWithGoogle() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, Const.RC_GOOGLE_SIGN);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Const.RC_GOOGLE_SIGN) {
+            presenter.signInWithGoogle(data);
+        }
+    }
     @Override
     public void onSuccess() {
-        Snackbar.make(binding.getRoot(), "Failed", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.getRoot(), "Welcome", Snackbar.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         getActivity().startActivity(intent);
         getActivity().finish();

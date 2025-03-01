@@ -134,6 +134,8 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
     }
 
 
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();

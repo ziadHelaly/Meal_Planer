@@ -22,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenterImpl;
 import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenter;
@@ -116,7 +118,7 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
                 if(etConfirm.getText().toString().equals(etPassword.getText().toString())){
                     presenter.signUp(etEmail.getText().toString().trim(),etPassword.getText().toString());
                 }else {
-                    Log.d("```TAG```", "password don't match");
+                    Snackbar.make(view,"Password must match confirm password",Snackbar.LENGTH_SHORT).show();
                 }
             }
         });
@@ -138,12 +140,13 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
 
     @Override
     public void onSuccess() {
-        Toast.makeText(getContext(),"Success",Toast.LENGTH_LONG).show();
+        Snackbar.make(getView(),"SignUp Seccessfully please signIn",Snackbar.LENGTH_SHORT).show();
+        Navigation.findNavController(getView()).popBackStack();
     }
 
     @Override
     public void onFailure() {
-        Toast.makeText(getContext(),"Failed",Toast.LENGTH_LONG).show();
+        Snackbar.make(getView(),"Signup field",Snackbar.LENGTH_SHORT).show();
     }
     public void setAllButtonsClickable(boolean clickable){
         btnSingUp.setClickable(clickable);

@@ -51,7 +51,7 @@ public class PorfileFragment extends Fragment implements ProfilePresenter.View{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter=new ProfilePresenterImpl(new FireBaseAuthModel(), RepositoryImpl.getRepository(getContext()),this);
-        binding.textView12.setText("User"+ Const.USER_ID);
+        binding.textView12.setText(Const.USER_NAME);
         binding.btnFavourites.setOnClickListener(v->{
             Navigation.findNavController(view).navigate(R.id.action_porfileFragment_to_favFragment);
         });

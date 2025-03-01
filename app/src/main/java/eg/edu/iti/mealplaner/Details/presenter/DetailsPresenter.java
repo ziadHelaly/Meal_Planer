@@ -1,9 +1,15 @@
 package eg.edu.iti.mealplaner.Details.presenter;
 
+import android.annotation.SuppressLint;
+
 import eg.edu.iti.mealplaner.model.models.Meal;
 
 public interface DetailsPresenter {
     void getData(String id);
+
+    @SuppressLint("CheckResult")
+    void isFavourite(String id);
+
     void addMealToFav(Meal meal);
     void removeFromFav(Meal meal);
 
@@ -16,5 +22,6 @@ public interface DetailsPresenter {
         void onRemoveFromFav();
         void showLoading();
         void hideLoading();
+
     }
 }

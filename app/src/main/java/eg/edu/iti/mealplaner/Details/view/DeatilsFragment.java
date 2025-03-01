@@ -1,5 +1,10 @@
 package eg.edu.iti.mealplaner.Details.view;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
+import android.app.DatePickerDialog;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -12,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +28,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,6 +73,7 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.getData(id);
+        presenter.isFavourite(id);
         binding.back.setOnClickListener(v -> {
             Navigation.findNavController(view).popBackStack();
         });
@@ -116,9 +124,36 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
                 Toast.makeText(getContext(), "youtube error " + error.name(), Toast.LENGTH_SHORT).show();
             }
         });
+        binding.ivPlan.setOnClickListener(v->{
+            setupDatePicker();
+        });
 
     }
+    private void setupDatePicker(){
+        // Get current date
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        // Create DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),R.style.CustomDatePickerDialogTheme,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Log.d("```TAG```", "onDateSet: ");
+                        String formattedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+                        Log.d("``TAG``", "setupDatePicker: "+formattedDate);
+                        Toast.makeText(getActivity(), formattedDate, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                year, month, day
+        );
+
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        datePickerDialog.show();
+    }
     @Override
     public void showSnackBar(String msg) {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT)
@@ -140,11 +175,17 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
 
     @Override
     public void showLoading() {
-
+        binding.loadingScreen.setVisibility(VISIBLE);
+        binding.cardView2.setVisibility(INVISIBLE);
+        binding.cvMeal.setVisibility(INVISIBLE);
     }
 
     @Override
     public void hideLoading() {
-
+        binding.loadingScreen.setVisibility(GONE);
+        binding.cardView2.setVisibility(VISIBLE);
+        binding.cvMeal.setVisibility(VISIBLE);
     }
+
+
 }

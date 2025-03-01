@@ -23,13 +23,28 @@ public class DetailsPresenterImpl implements DetailsPresenter {
     @SuppressLint("CheckResult")
     @Override
     public void getData(String id) {
+        view.showLoading();
         repo.getMealById(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
+                    view.hideLoading();
                     view.showData(item.getMeals().get(0));
                 }, error -> {
                     //TODO
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void isFavourite(String id) {
+        repo.isFavourite(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    if (item > 0) {
+                        view.onAddToFav();
+                    }
                 });
     }
 
@@ -39,7 +54,7 @@ public class DetailsPresenterImpl implements DetailsPresenter {
         repo.addMealToFav(meal)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(()->{
+                .subscribe(() -> {
                     view.showSnackBar("Added Successfully to favourites");
                     view.onAddToFav();
                 });
@@ -51,7 +66,7 @@ public class DetailsPresenterImpl implements DetailsPresenter {
         repo.removeMealFromFav(meal)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(()->{
+                .subscribe(() -> {
                     view.showSnackBar("removed from favourites");
                     view.onRemoveFromFav();
                 });

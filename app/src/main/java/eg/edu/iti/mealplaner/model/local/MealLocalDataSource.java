@@ -37,4 +37,8 @@ public class MealLocalDataSource {
     public Single<Meal> getMeal(String id){
         return MealDao.getMeal(id);
     }
+
+    public Single<Integer> isFavourite(String id){
+        return MealDao.isFavourite(id);
+    }
 }

@@ -35,5 +35,8 @@
         <item name="fontFamily">@font/ft_poppins_semi_bold</item>
         <item name="android:textSize">14sp</item>
     </style>
-
+    <style name="CustomDatePickerDialogTheme" parent="Theme.Material3.Dark.Dialog.Alert">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
 </resources>

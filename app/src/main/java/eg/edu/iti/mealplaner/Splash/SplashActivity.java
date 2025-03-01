@@ -34,6 +34,7 @@ public class SplashActivity extends AppCompatActivity {
             Intent intent;
             if (isLogged) {
                 Const.USER_ID =pref.getString(Const.USER_ID_TAG);
+                Const.USER_NAME=pref.getString(Const.USER_NAME_TAG);
                 intent = new Intent(SplashActivity.this, HomeActivity.class);
             } else {
                 intent = new Intent(SplashActivity.this, AuthActivity.class);

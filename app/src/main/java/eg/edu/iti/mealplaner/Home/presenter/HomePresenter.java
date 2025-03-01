@@ -1,5 +1,7 @@
 package eg.edu.iti.mealplaner.Home.presenter;
 
+import android.annotation.SuppressLint;
+
 import java.util.List;
 
 import eg.edu.iti.mealplaner.model.models.Category;
@@ -12,6 +14,8 @@ public interface HomePresenter {
     void getData();
 
 
+
+
     public interface View{
         void showLoadingScreen();
         void hideLoadingScreen();
@@ -22,6 +26,7 @@ public interface HomePresenter {
         void displayVeganSection(List<Meal> meals);
 
         void showMsg(String msg);
+
 
     }
 }

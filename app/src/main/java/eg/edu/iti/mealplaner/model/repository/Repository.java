@@ -16,11 +16,17 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface Repository {
     void saveUserId(String id);
+    void saveUserName(String username);
+
+    void getUserName();
 
     void onSignOut();
 
     boolean isLogged();
     String getUserID();
+
+    Single<Integer> isFavourite(String id);
+
     Completable addMealToFav(Meal meal);
     Completable removeMealFromFav(Meal meal);
     Flowable<List<Meal>> getFavsMeals( );

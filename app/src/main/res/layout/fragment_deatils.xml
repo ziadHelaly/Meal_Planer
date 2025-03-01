@@ -218,4 +218,13 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/loading" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/ivPlan"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/ivFav"
+        app:layout_constraintTop_toTopOf="@+id/ivFav"
+        app:srcCompat="@drawable/ic_calendar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
