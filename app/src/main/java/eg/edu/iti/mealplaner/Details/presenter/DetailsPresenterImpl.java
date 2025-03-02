@@ -65,6 +65,8 @@ public class DetailsPresenterImpl implements DetailsPresenter {
                         }
                         getData(id);
                     });
+        }else{
+            getData(id);
         }
     }
 

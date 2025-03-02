@@ -83,5 +83,6 @@ public class PorfileFragment extends Fragment implements ProfilePresenter.View{
     public void onSignOut() {
         Intent intent=new Intent(getActivity(), AuthActivity.class);
         getActivity().startActivity(intent);
+        getActivity().finish();
     }
 }
