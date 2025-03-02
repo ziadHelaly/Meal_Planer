@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -32,6 +33,7 @@ import eg.edu.iti.mealplaner.Home.presenter.HomePresenterImpl;
 import eg.edu.iti.mealplaner.databinding.FragmentHomeBinding;
 import eg.edu.iti.mealplaner.Home.view.HomeFragmentDirections.ActionHomeFragmentToDeatilsFragment;
 import eg.edu.iti.mealplaner.utilies.FilterType;
+import eg.edu.iti.mealplaner.utilies.NetworkStatusManager;
 import eg.edu.iti.mealplaner.view.ItemsAdapter;
 import eg.edu.iti.mealplaner.view.OnItemClicked;
 
@@ -40,6 +42,7 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
     HomePresenter presenter;
     FragmentHomeBinding binding;
 
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -47,6 +50,7 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -61,28 +65,57 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        NetworkStatusManager networkStatusManager = NetworkStatusManager.getInstance();
+        networkStatusManager.getNetworkStatus().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isConnected) {
+                if (isConnected) {
+                    onConnection();
+                } else {
+                    // Handle network unavailable
+                    onNoConnection();
+
+                }
+            }
+        });
         presenter = new HomePresenterImpl(RepositoryImpl.getRepository(getContext()), this);
         presenter.getData();
         this.view = view;
-        binding.tvSeeMoreEgypt.setOnClickListener(v->{
-            navToFilteredScreen(FilterType.Area,"Egyptian");
+        binding.tvSeeMoreEgypt.setOnClickListener(v -> {
+            navToFilteredScreen(FilterType.Area, "Egyptian");
         });
-        binding.tvSeeMoreBeef.setOnClickListener(v->{
-            navToFilteredScreen(FilterType.Category,"Beef");
+        binding.tvSeeMoreBeef.setOnClickListener(v -> {
+            navToFilteredScreen(FilterType.Category, "Beef");
         });
-        binding.tvSeeMoreVegan.setOnClickListener(v->{
-            navToFilteredScreen(FilterType.Category,"Vegan");
+        binding.tvSeeMoreVegan.setOnClickListener(v -> {
+            navToFilteredScreen(FilterType.Category, "Vegan");
         });
+    }
+
+    public void onNoConnection() {
+        binding.noNetworkLayer.setVisibility(VISIBLE);
+        binding.cardView.setVisibility(INVISIBLE);
+    }
+
+    boolean isLoading = false;
+
+    public void onConnection() {
+        binding.noNetworkLayer.setVisibility(GONE);
+        if (!isLoading) {
+            binding.cardView.setVisibility(VISIBLE);
+        }
     }
 
     @Override
     public void showLoadingScreen() {
+        isLoading = true;
         binding.loadingScreen.setVisibility(VISIBLE);
         binding.cardView.setVisibility(INVISIBLE);
     }
 
     @Override
     public void hideLoadingScreen() {
+        isLoading = false;
         binding.loadingScreen.setVisibility(GONE);
         binding.cardView.setVisibility(VISIBLE);
     }
@@ -115,25 +148,23 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
     @Override
     public void displayEgyptSection(List<Meal> meals) {
         Log.d("``TAG``", "displayEgyptSection: ");
-        binding.rvEgypt.setAdapter(new ItemsAdapter(meals, getContext(),this));
+        binding.rvEgypt.setAdapter(new ItemsAdapter(meals, getContext(), this));
     }
 
     @Override
     public void displayBeefSection(List<Meal> meals) {
-        binding.rvBeef.setAdapter(new ItemsAdapter(meals, getContext(),this));
+        binding.rvBeef.setAdapter(new ItemsAdapter(meals, getContext(), this));
     }
 
     @Override
     public void displayVeganSection(List<Meal> meals) {
-        binding.rvVegan.setAdapter(new ItemsAdapter(meals, getContext(),this));
+        binding.rvVegan.setAdapter(new ItemsAdapter(meals, getContext(), this));
     }
 
     @Override
     public void showMsg(String msg) {
-        Snackbar.make(view,msg,Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
     }
-
-
 
 
     @Override

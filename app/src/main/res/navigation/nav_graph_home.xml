@@ -74,7 +74,11 @@
         android:id="@+id/calenderFragment"
         android:name="eg.edu.iti.mealplaner.calender.view.CalenderFragment"
         android:label="fragment_calender"
-        tools:layout="@layout/fragment_calender" />
+        tools:layout="@layout/fragment_calender" >
+        <action
+            android:id="@+id/action_calenderFragment_to_deatilsFragment"
+            app:destination="@id/deatilsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/filteredFragment"
         android:name="eg.edu.iti.mealplaner.FilteredScreen.view.FilteredFragment"

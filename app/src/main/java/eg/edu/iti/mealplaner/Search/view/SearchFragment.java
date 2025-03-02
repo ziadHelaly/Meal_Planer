@@ -1,10 +1,15 @@
 package eg.edu.iti.mealplaner.Search.view;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.text.Editable;
@@ -30,6 +35,7 @@ import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.presenter.PresenterInterface;
 import eg.edu.iti.mealplaner.utilies.FilterType;
+import eg.edu.iti.mealplaner.utilies.NetworkStatusManager;
 import eg.edu.iti.mealplaner.view.OnItemClicked;
 
 
@@ -60,6 +66,19 @@ public class SearchFragment extends Fragment implements SearchPresenter.View , O
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        NetworkStatusManager networkStatusManager = NetworkStatusManager.getInstance();
+        networkStatusManager.getNetworkStatus().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isConnected) {
+                if (isConnected) {
+                    onConnection();
+                } else {
+                    // Handle network unavailable
+                    onNoConnection();
+
+                }
+            }
+        });
         categoryAdapter=new CategoryAdapter(getContext(),this);
         countriesAdapter=new CountriesAdapter(getContext(),this);
         ingredientsAdapter=new IngredientsFilterAdapter(getContext(),this);
@@ -123,6 +142,16 @@ public class SearchFragment extends Fragment implements SearchPresenter.View , O
     @Override
     public void showErrorMsg(String msg) {
 
+    }
+
+
+
+    public void onConnection() {
+        binding.noNetworkLayer.setVisibility(GONE);
+
+    }
+    public void onNoConnection() {
+        binding.noNetworkLayer.setVisibility(VISIBLE);
     }
 
     @Override
