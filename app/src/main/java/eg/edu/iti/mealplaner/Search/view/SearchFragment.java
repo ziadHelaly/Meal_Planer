@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.google.android.material.chip.Chip;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -28,10 +29,16 @@ import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.Search.presenter.SearchPresenter;
 import eg.edu.iti.mealplaner.Search.presenter.SearchPresenterImpl;
 import eg.edu.iti.mealplaner.databinding.FragmentSearchBinding;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
+import eg.edu.iti.mealplaner.model.local.SharedPreference;
 import eg.edu.iti.mealplaner.model.models.Category;
 import eg.edu.iti.mealplaner.model.models.Country;
 import eg.edu.iti.mealplaner.model.models.Ingredient;
 import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.presenter.PresenterInterface;
 import eg.edu.iti.mealplaner.utilies.FilterType;
@@ -82,7 +89,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.View , O
         categoryAdapter=new CategoryAdapter(getContext(),this);
         countriesAdapter=new CountriesAdapter(getContext(),this);
         ingredientsAdapter=new IngredientsFilterAdapter(getContext(),this);
-        presenter=new SearchPresenterImpl(this, RepositoryImpl.getRepository(getContext()));
+        setupPresenter();
         presenter.getData();
         //each chip will change filter type
         for (int i = 0; i < binding.chipGroup.getChildCount(); i++) {
@@ -117,7 +124,13 @@ public class SearchFragment extends Fragment implements SearchPresenter.View , O
         });
 
     }
-
+    private void setupPresenter(){
+        MealLocalDataSource local= MealLocalDataSourceImpl.getMealLocalDataSource(getContext());
+        MealsRemoteDataSource remote= MealsRemoteDataSourceImpl.getInstance(getContext());
+        SharedPreference sharedPreference=SharedPreference.getInstance(getContext());
+        FireBaseAuthModel fireBaseAuthModel= new FireBaseAuthModel(FirebaseAuth.getInstance());
+        presenter = new SearchPresenterImpl(this, RepositoryImpl.getRepository(remote,local,sharedPreference,fireBaseAuthModel));
+    }
     @Override
     public void onResume() {
         super.onResume();

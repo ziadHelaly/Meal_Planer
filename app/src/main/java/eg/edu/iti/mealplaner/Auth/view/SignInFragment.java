@@ -27,8 +27,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import eg.edu.iti.mealplaner.databinding.FragmentSignInBinding;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
+import eg.edu.iti.mealplaner.model.local.SharedPreference;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.utilies.Const;
 import eg.edu.iti.mealplaner.view.HomeActivity;
@@ -67,7 +74,7 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new AuthPresenterImpl(this, RepositoryImpl.getRepository(getContext()));
+        setupPresenter();
         etEmail = view.findViewById(R.id.etEmail);
         etPassword = view.findViewById(R.id.etPassword);
         btnSingIn = view.findViewById(R.id.btnSingUp);
@@ -141,6 +148,13 @@ public class SignInFragment extends Fragment implements AuthPresenter.view {
         binding.btGoogle.setOnClickListener(v->{
             signInWithGoogle();
         });
+    }
+    private void setupPresenter(){
+        MealLocalDataSource local= MealLocalDataSourceImpl.getMealLocalDataSource(getContext());
+        MealsRemoteDataSource remote= MealsRemoteDataSourceImpl.getInstance(getContext());
+        SharedPreference sharedPreference=SharedPreference.getInstance(getContext());
+        FireBaseAuthModel fireBaseAuthModel= new FireBaseAuthModel(FirebaseAuth.getInstance());
+        presenter = new AuthPresenterImpl(this, RepositoryImpl.getRepository(remote,local,sharedPreference,fireBaseAuthModel));
     }
 
     public void setAllButtonsClickable(boolean clickable) {

@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -34,7 +35,13 @@ import java.util.regex.Pattern;
 
 import eg.edu.iti.mealplaner.Details.view.DeatilsFragmentArgs;
 import eg.edu.iti.mealplaner.R;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
+import eg.edu.iti.mealplaner.model.local.SharedPreference;
 import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.Details.presenter.DetailsPresenter;
 import eg.edu.iti.mealplaner.Details.presenter.DetailsPresenterImpl;
@@ -67,10 +74,16 @@ public class DeatilsFragment extends Fragment implements DetailsPresenter.View {
         binding = FragmentDeatilsBinding.inflate(inflater, container, false);
         id = DeatilsFragmentArgs.fromBundle(getArguments()).getIdMeal();
         Log.d("```TAG```", "onCreateView: " + id);
-        presenter = new DetailsPresenterImpl(RepositoryImpl.getRepository(getContext()), this);
+        setupPresenter();
         return binding.getRoot();
     }
-
+    private void setupPresenter(){
+        MealLocalDataSource local= MealLocalDataSourceImpl.getMealLocalDataSource(getContext());
+        MealsRemoteDataSource remote= MealsRemoteDataSourceImpl.getInstance(getContext());
+        SharedPreference sharedPreference=SharedPreference.getInstance(getContext());
+        FireBaseAuthModel fireBaseAuthModel= new FireBaseAuthModel(FirebaseAuth.getInstance());
+        presenter = new DetailsPresenterImpl( RepositoryImpl.getRepository(remote,local,sharedPreference,fireBaseAuthModel),this);
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

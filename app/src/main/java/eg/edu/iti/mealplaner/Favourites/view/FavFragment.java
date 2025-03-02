@@ -14,13 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
 import eg.edu.iti.mealplaner.Favourites.presenter.FavPresenter;
 import eg.edu.iti.mealplaner.Favourites.presenter.FavPresenterImpl;
+import eg.edu.iti.mealplaner.Home.presenter.HomePresenterImpl;
 import eg.edu.iti.mealplaner.databinding.FragmentFavBinding;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
+import eg.edu.iti.mealplaner.model.local.SharedPreference;
 import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 
 
@@ -50,8 +58,15 @@ public class FavFragment extends Fragment implements FavPresenter.View,OnFavRemo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new FavPresenterImpl(this, RepositoryImpl.getRepository(getContext()));
+        setupPresenter();
         presenter.getData();
+    }
+    private void setupPresenter(){
+        MealLocalDataSource local= MealLocalDataSourceImpl.getMealLocalDataSource(getContext());
+        MealsRemoteDataSource remote= MealsRemoteDataSourceImpl.getInstance(getContext());
+        SharedPreference sharedPreference=SharedPreference.getInstance(getContext());
+        FireBaseAuthModel fireBaseAuthModel= new FireBaseAuthModel(FirebaseAuth.getInstance());
+        presenter = new FavPresenterImpl(this, RepositoryImpl.getRepository(remote,local,sharedPreference,fireBaseAuthModel));
     }
 
     @Override

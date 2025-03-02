@@ -2,6 +2,7 @@ package eg.edu.iti.mealplaner.Home.presenter;
 
 import android.annotation.SuppressLint;
 
+import eg.edu.iti.mealplaner.Home.view.HomeFragment;
 import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.repository.Repository;
 import eg.edu.iti.mealplaner.utilies.Const;
@@ -12,8 +13,9 @@ public class HomePresenterImpl implements HomePresenter {
     Repository myRepo;
     HomePresenter.View view;
 
-    public HomePresenterImpl(Repository myRepo, View view) {
-        this.myRepo = myRepo;
+
+    public HomePresenterImpl(View view, Repository repository) {
+        this.myRepo = repository;
         this.view = view;
     }
 

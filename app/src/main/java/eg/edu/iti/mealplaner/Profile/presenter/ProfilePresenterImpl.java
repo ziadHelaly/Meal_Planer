@@ -9,8 +9,7 @@ public class ProfilePresenterImpl implements ProfilePresenter{
     Repository repository;
     View view;
 
-    public ProfilePresenterImpl(FireBaseAuthModel firebaseAuth, Repository repository, View view) {
-        this.firebaseAuth = firebaseAuth;
+    public ProfilePresenterImpl(Repository repository, View view) {
         this.repository = repository;
         this.view = view;
     }
@@ -18,7 +17,7 @@ public class ProfilePresenterImpl implements ProfilePresenter{
 
     @Override
     public void signOut() {
-        firebaseAuth.signOut();
+        repository.signOut();
         repository.onSignOut();
         view.onSignOut();
     }

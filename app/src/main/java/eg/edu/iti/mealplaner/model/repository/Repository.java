@@ -2,8 +2,11 @@ package eg.edu.iti.mealplaner.model.repository;
 
 import androidx.lifecycle.LiveData;
 
+import com.google.android.gms.tasks.Task;
+
 import java.util.List;
 
+import eg.edu.iti.mealplaner.Auth.presenter.FirebaseCallBack;
 import eg.edu.iti.mealplaner.model.models.CategoryResponse;
 import eg.edu.iti.mealplaner.model.models.Country;
 import eg.edu.iti.mealplaner.model.models.FilterList;
@@ -46,4 +49,9 @@ public interface Repository {
     Completable addPlan(Plan plan);
 
     Completable removePlan(Plan plan);
+
+    void singIn(String email, String password, FirebaseCallBack callBack);
+    void singUp(String email, String password, FirebaseCallBack callBack);
+    void signInWithGoogleCredential(String idToken,FirebaseCallBack callBack);
+    void signOut();
 }

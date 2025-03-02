@@ -21,12 +21,20 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenterImpl;
 import eg.edu.iti.mealplaner.R;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
+import eg.edu.iti.mealplaner.model.local.SharedPreference;
 import eg.edu.iti.mealplaner.model.models.Category;
 import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.Home.presenter.HomePresenter;
 import eg.edu.iti.mealplaner.Home.presenter.HomePresenterImpl;
@@ -73,15 +81,14 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
                     network=true;
                     onConnection();
                 } else {
-                    // Handle network unavailable
                     network=false;
                     onNoConnection();
-
                 }
             }
         });
-        presenter = new HomePresenterImpl(RepositoryImpl.getRepository(getContext()), this);
-//        presenter.getData();
+
+        setupPresenter();
+        //        presenter.getData();
         this.view = view;
         binding.tvSeeMoreEgypt.setOnClickListener(v -> {
             navToFilteredScreen(FilterType.Area, "Egyptian");
@@ -92,6 +99,13 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
         binding.tvSeeMoreVegan.setOnClickListener(v -> {
             navToFilteredScreen(FilterType.Category, "Vegan");
         });
+    }
+    private void setupPresenter(){
+        MealLocalDataSource local= MealLocalDataSourceImpl.getMealLocalDataSource(getContext());
+        MealsRemoteDataSource remote= MealsRemoteDataSourceImpl.getInstance(getContext());
+        SharedPreference sharedPreference=SharedPreference.getInstance(getContext());
+        FireBaseAuthModel fireBaseAuthModel= new FireBaseAuthModel(FirebaseAuth.getInstance());
+        presenter = new HomePresenterImpl(this, RepositoryImpl.getRepository(remote,local,sharedPreference,fireBaseAuthModel));
     }
 
     public void onNoConnection() {

@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
-        pref=new SharedPreference(this);
+        pref=SharedPreference.getInstance(this);
         boolean isLogged = pref.getBoolean(Const.isLogged_TAG);
         Const.isLogged = isLogged;
         handler = new Handler(Looper.getMainLooper());

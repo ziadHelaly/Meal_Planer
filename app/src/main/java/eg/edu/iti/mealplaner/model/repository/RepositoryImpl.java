@@ -1,10 +1,13 @@
 package eg.edu.iti.mealplaner.model.repository;
 
-import android.content.Context;
+import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
+import eg.edu.iti.mealplaner.Auth.presenter.FirebaseCallBack;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
 import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
 import eg.edu.iti.mealplaner.model.local.SharedPreference;
 import eg.edu.iti.mealplaner.model.models.CategoryResponse;
 import eg.edu.iti.mealplaner.model.models.Country;
@@ -14,6 +17,7 @@ import eg.edu.iti.mealplaner.model.models.Meal;
 import eg.edu.iti.mealplaner.model.models.MealsResponse;
 import eg.edu.iti.mealplaner.model.models.Plan;
 import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.utilies.Const;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -23,18 +27,25 @@ public class RepositoryImpl implements Repository {
     MealsRemoteDataSource remote;
     MealLocalDataSource local;
     SharedPreference sharedPreference;
-
+    FireBaseAuthModel fireBaseAuthModel;
     private static Repository repo = null;
 
-    private RepositoryImpl(Context context) {
-        remote = new MealsRemoteDataSource(context);
-        sharedPreference = new SharedPreference(context);
-        local = new MealLocalDataSource(context);
+
+    public RepositoryImpl(MealsRemoteDataSource remote, MealLocalDataSource local, SharedPreference sharedPreference, FireBaseAuthModel fireBaseAuthModel) {
+        this.remote = remote;
+        this.local = local;
+        this.sharedPreference = sharedPreference;
+        this.fireBaseAuthModel = fireBaseAuthModel;
     }
 
-    public static Repository getRepository(Context context) {
+    public static Repository getRepository(
+            MealsRemoteDataSource remote,
+            MealLocalDataSource local,
+            SharedPreference sharedPreference,
+            FireBaseAuthModel fireBaseAuthModel
+    ) {
         if (repo == null) {
-            repo = new RepositoryImpl(context);
+            repo = new RepositoryImpl(remote, local, sharedPreference, fireBaseAuthModel);
         }
         return repo;
     }
@@ -149,12 +160,34 @@ public class RepositoryImpl implements Repository {
     public Flowable<List<Plan>> getPlansByDay(String userId, String day) {
         return local.getPlans(userId, day);
     }
+
     @Override
     public Completable addPlan(Plan plan) {
         return local.addPlan(plan);
     }
+
     @Override
     public Completable removePlan(Plan plan) {
         return local.removePlan(plan);
+    }
+
+    @Override
+    public void singIn(String email, String password, FirebaseCallBack callBack) {
+           fireBaseAuthModel.singIn(email, password, callBack);
+    }
+
+    @Override
+    public void singUp(String email, String password, FirebaseCallBack callBack) {
+        fireBaseAuthModel.singUp(email, password, callBack);
+    }
+
+    @Override
+    public void signInWithGoogleCredential(String idToken, FirebaseCallBack callBack) {
+        fireBaseAuthModel.signInWithGoogleCredential(idToken, callBack);
+    }
+
+    @Override
+    public void signOut() {
+        fireBaseAuthModel.signOut();
     }
 }

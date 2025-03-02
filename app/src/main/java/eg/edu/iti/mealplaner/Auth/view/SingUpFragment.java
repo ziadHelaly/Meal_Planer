@@ -23,24 +23,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenterImpl;
 import eg.edu.iti.mealplaner.Auth.presenter.AuthPresenter;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
+import eg.edu.iti.mealplaner.model.local.SharedPreference;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 
 
 public class SingUpFragment extends Fragment implements AuthPresenter.view {
     AuthPresenter presenter;
-    EditText etEmail,etPassword,etConfirm;
+    EditText etEmail, etPassword, etConfirm;
 
     ConstraintLayout btnSingUp;
-    TextView tvSignUp,tvSignIn;
+    TextView tvSignUp, tvSignIn;
     ProgressBar progressBar;
 
     public SingUpFragment() {
         // Required empty public constructor
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,14 +64,14 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter= new AuthPresenterImpl(this, RepositoryImpl.getRepository(getContext()));
-        etEmail=view.findViewById(R.id.etEmail);
-        etPassword=view.findViewById(R.id.etPassword);
-        btnSingUp=view.findViewById(R.id.btnSingUp);
-        tvSignUp=view.findViewById(R.id.tvSingUpBtn);
-        progressBar=view.findViewById(R.id.pbLoad);
-        tvSignIn=view.findViewById(R.id.tvSingIn);
-        etConfirm=view.findViewById(R.id.etConfirmPassword);
+        setupPresenter();
+        etEmail = view.findViewById(R.id.etEmail);
+        etPassword = view.findViewById(R.id.etPassword);
+        btnSingUp = view.findViewById(R.id.btnSingUp);
+        tvSignUp = view.findViewById(R.id.tvSingUpBtn);
+        progressBar = view.findViewById(R.id.pbLoad);
+        tvSignIn = view.findViewById(R.id.tvSingIn);
+        etConfirm = view.findViewById(R.id.etConfirmPassword);
         etEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -112,27 +120,36 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
 
             }
         });
-        btnSingUp.setOnClickListener(v->{
+        btnSingUp.setOnClickListener(v -> {
             Log.d("``TAG``", "onViewCreated: click");
-            if (!etEmail.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()){
-                if(etConfirm.getText().toString().equals(etPassword.getText().toString())){
-                    presenter.signUp(etEmail.getText().toString().trim(),etPassword.getText().toString());
-                }else {
-                    Snackbar.make(view,"Password must match confirm password",Snackbar.LENGTH_SHORT).show();
+            if (!etEmail.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()) {
+                if (etConfirm.getText().toString().equals(etPassword.getText().toString())) {
+                    presenter.signUp(etEmail.getText().toString().trim(), etPassword.getText().toString());
+                } else {
+                    Snackbar.make(view, "Password must match confirm password", Snackbar.LENGTH_SHORT).show();
                 }
             }
         });
-        tvSignIn.setOnClickListener(v->{
+        tvSignIn.setOnClickListener(v -> {
             Navigation.findNavController(view).popBackStack();
         });
     }
-    private void checkEdText(){
+
+    private void setupPresenter() {
+        MealLocalDataSource local = MealLocalDataSourceImpl.getMealLocalDataSource(getContext());
+        MealsRemoteDataSource remote = MealsRemoteDataSourceImpl.getInstance(getContext());
+        SharedPreference sharedPreference = SharedPreference.getInstance(getContext());
+        FireBaseAuthModel fireBaseAuthModel = new FireBaseAuthModel(FirebaseAuth.getInstance());
+        presenter = new AuthPresenterImpl(this, RepositoryImpl.getRepository(remote, local, sharedPreference, fireBaseAuthModel));
+    }
+
+    private void checkEdText() {
         if (etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty() || etConfirm.getText().toString().isEmpty()) {
-            if(etConfirm.getText().toString().equals(etPassword.getText().toString())){
+            if (etConfirm.getText().toString().equals(etPassword.getText().toString())) {
                 btnSingUp.setBackgroundResource(R.drawable.btn_shape);
                 btnSingUp.setClickable(false);
             }
-        }else {
+        } else {
             btnSingUp.setBackgroundResource(R.drawable.btn_active);
             btnSingUp.setClickable(true);
         }
@@ -140,18 +157,20 @@ public class SingUpFragment extends Fragment implements AuthPresenter.view {
 
     @Override
     public void onSuccess() {
-        Snackbar.make(getView(),"SignUp Seccessfully please signIn",Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getView(), "SignUp Seccessfully please signIn", Snackbar.LENGTH_SHORT).show();
         Navigation.findNavController(getView()).popBackStack();
     }
 
     @Override
     public void onFailure() {
-        Snackbar.make(getView(),"Signup field",Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getView(), "Signup field", Snackbar.LENGTH_SHORT).show();
     }
-    public void setAllButtonsClickable(boolean clickable){
+
+    public void setAllButtonsClickable(boolean clickable) {
         btnSingUp.setClickable(clickable);
         tvSignIn.setClickable(clickable);
     }
+
     @Override
     public void showProgressBar() {
         setAllButtonsClickable(false);

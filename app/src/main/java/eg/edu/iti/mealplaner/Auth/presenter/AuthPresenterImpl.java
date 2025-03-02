@@ -14,13 +14,12 @@ import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
 import eg.edu.iti.mealplaner.model.repository.Repository;
 import eg.edu.iti.mealplaner.utilies.Const;
 
-public class AuthPresenterImpl implements AuthPresenter {
-    FireBaseAuthModel model;
+public class AuthPresenterImpl implements AuthPresenter ,FirebaseCallBack{
+
     AuthPresenter.view view;
     Repository repo;
 
     public AuthPresenterImpl(AuthPresenter.view view,Repository repo) {
-        this.model = new FireBaseAuthModel();
         this.view = view;
         this.repo=repo;
     }
@@ -28,35 +27,13 @@ public class AuthPresenterImpl implements AuthPresenter {
     @Override
     public void signIn(String email, String password) {
         view.showProgressBar();
-        model.singIn(email, password).addOnCompleteListener(task->{
-            if (task.isSuccessful()){
-                repo.saveUserId(task.getResult().getUser().getUid());
-                Log.d("``TAG``", "signIn: "+task.getResult().getUser().getUid());
-                repo.saveUserName("user"+task.getResult().getUser().getUid().subSequence(0,5));
-                view.hideProgressBar();
-                view.onSuccess();
-            }else {
-                view.hideProgressBar();
-                view.onFailure();
-            }
-        });
-
+        repo.singIn(email, password,this);
     }
 
     @Override
     public void signUp(String email, String password) {
         view.showProgressBar();
-        model.singUp(email, password).addOnCompleteListener(task->{
-            if (task.isSuccessful()){
-                repo.saveUserId(task.getResult().getUser().getUid());
-                repo.saveUserName("user"+task.getResult().getUser().getUid().subSequence(0,5));
-                view.hideProgressBar();
-                view.onSuccess();
-            }else {
-                view.hideProgressBar();
-                view.onFailure();
-            }
-        });
+        repo.singUp(email, password,this);
     }
     @Override
     public void signInWithGoogle(Intent data) {
@@ -64,14 +41,7 @@ public class AuthPresenterImpl implements AuthPresenter {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             if (account != null) {
-                model.signInWithGoogleCredential(account.getIdToken()).addOnCompleteListener(result -> {
-                    if (result.isSuccessful()) {
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        repo.saveUserId(result.getResult().getUser().getUid());
-                        repo.saveUserName(user.getDisplayName());
-                        view.onSuccess();
-                    }
-                });
+                repo.signInWithGoogleCredential(account.getIdToken(),this);
             }
         } catch (ApiException e) {
             Log.d("``TAG``", "signInWithGoogle: "+e.getMessage());
@@ -80,6 +50,27 @@ public class AuthPresenterImpl implements AuthPresenter {
     @Override
     public void guestMode() {
         Const.isLogged=false;
+        view.onSuccess();
+    }
+
+    @Override
+    public void onSuccess(FirebaseUser user) {
+        repo.saveUserId(user.getUid());
+        repo.saveUserName("user"+user.getUid().subSequence(0,5));
+        view.hideProgressBar();
+        view.onSuccess();
+    }
+
+    @Override
+    public void onFailure() {
+        view.hideProgressBar();
+        view.onFailure();
+    }
+
+    @Override
+    public void onSuccessGoogle(FirebaseUser user) {
+        repo.saveUserId(user.getUid());
+        repo.saveUserName(user.getDisplayName());
         view.onSuccess();
     }
 }

@@ -16,14 +16,22 @@ import android.widget.CalendarView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import eg.edu.iti.mealplaner.Home.presenter.HomePresenterImpl;
 import eg.edu.iti.mealplaner.R;
 import eg.edu.iti.mealplaner.calender.presenter.CalenderPresenter;
 import eg.edu.iti.mealplaner.calender.presenter.CalenderPresenterImpl;
 import eg.edu.iti.mealplaner.databinding.FragmentCalenderBinding;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
+import eg.edu.iti.mealplaner.model.local.SharedPreference;
 import eg.edu.iti.mealplaner.model.models.Plan;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.utilies.CalenderUtil;
 import eg.edu.iti.mealplaner.view.OnItemClicked;
@@ -53,7 +61,7 @@ public class CalenderFragment extends Fragment implements CalenderPresenter.View
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter= new CalenderPresenterImpl(RepositoryImpl.getRepository(getContext()),this);
+        setupPresenter();
         adapter=new PlansAdapter(getContext(),this,this);
         binding.rvPlans.setAdapter(adapter);
         presenter.getPlansByDay(CalenderUtil.getToday());
@@ -65,6 +73,13 @@ public class CalenderFragment extends Fragment implements CalenderPresenter.View
             }
         });
 
+    }
+    private void setupPresenter(){
+        MealLocalDataSource local= MealLocalDataSourceImpl.getMealLocalDataSource(getContext());
+        MealsRemoteDataSource remote= MealsRemoteDataSourceImpl.getInstance(getContext());
+        SharedPreference sharedPreference=SharedPreference.getInstance(getContext());
+        FireBaseAuthModel fireBaseAuthModel= new FireBaseAuthModel(FirebaseAuth.getInstance());
+        presenter = new CalenderPresenterImpl(RepositoryImpl.getRepository(remote,local,sharedPreference,fireBaseAuthModel),this);
     }
 
     @Override

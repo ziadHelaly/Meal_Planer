@@ -18,13 +18,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
 import eg.edu.iti.mealplaner.FilteredScreen.presenter.FilteredPresenter;
 import eg.edu.iti.mealplaner.FilteredScreen.presenter.FilteredPresenterImpl;
 import eg.edu.iti.mealplaner.databinding.FragmentFilteredBinding;
+import eg.edu.iti.mealplaner.model.firebase.FireBaseAuthModel;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSource;
+import eg.edu.iti.mealplaner.model.local.MealLocalDataSourceImpl;
+import eg.edu.iti.mealplaner.model.local.SharedPreference;
 import eg.edu.iti.mealplaner.model.models.Meal;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSource;
+import eg.edu.iti.mealplaner.model.remote.MealsRemoteDataSourceImpl;
 import eg.edu.iti.mealplaner.model.repository.RepositoryImpl;
 import eg.edu.iti.mealplaner.utilies.FilterType;
 import eg.edu.iti.mealplaner.utilies.NetworkStatusManager;
@@ -73,7 +80,7 @@ public class FilteredFragment extends Fragment implements FilteredPresenter.View
         });
         type=FilteredFragmentArgs.fromBundle(getArguments()).getFilterType();
         name=FilteredFragmentArgs.fromBundle(getArguments()).getCategoryName();
-        presenter=new FilteredPresenterImpl(this, RepositoryImpl.getRepository(getContext()));
+        setupPresenter();
         presenter.getData(type,name);
         binding.tvCategoryName.setText(name+" Category");
         binding.backBtn.setOnClickListener(v -> {
@@ -95,6 +102,13 @@ public class FilteredFragment extends Fragment implements FilteredPresenter.View
 
             }
         });
+    }
+    private void setupPresenter(){
+        MealLocalDataSource local= MealLocalDataSourceImpl.getMealLocalDataSource(getContext());
+        MealsRemoteDataSource remote= MealsRemoteDataSourceImpl.getInstance(getContext());
+        SharedPreference sharedPreference=SharedPreference.getInstance(getContext());
+        FireBaseAuthModel fireBaseAuthModel= new FireBaseAuthModel(FirebaseAuth.getInstance());
+        presenter = new FilteredPresenterImpl(this, RepositoryImpl.getRepository(remote,local,sharedPreference,fireBaseAuthModel));
     }
     public void onNoConnection() {
         binding.noNetworkLayer.setVisibility(VISIBLE);
