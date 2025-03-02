@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
     }
 
     View view;
-
+    boolean network;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -70,16 +70,18 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
             @Override
             public void onChanged(Boolean isConnected) {
                 if (isConnected) {
+                    network=true;
                     onConnection();
                 } else {
                     // Handle network unavailable
+                    network=false;
                     onNoConnection();
 
                 }
             }
         });
         presenter = new HomePresenterImpl(RepositoryImpl.getRepository(getContext()), this);
-        presenter.getData();
+//        presenter.getData();
         this.view = view;
         binding.tvSeeMoreEgypt.setOnClickListener(v -> {
             navToFilteredScreen(FilterType.Area, "Egyptian");
@@ -103,6 +105,19 @@ public class HomeFragment extends Fragment implements HomePresenter.View, OnItem
         binding.noNetworkLayer.setVisibility(GONE);
         if (!isLoading) {
             binding.cardView.setVisibility(VISIBLE);
+
+        }
+        presenter.getData();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!network){
+            binding.cardView.setVisibility(GONE);
+        }else {
+            presenter.getData();
         }
     }
 
